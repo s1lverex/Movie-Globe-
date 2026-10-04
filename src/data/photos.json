@@ -1,0 +1,446 @@
+{
+  "alnwick-castle": [
+    {
+      "src": "/images/locations/alnwick-castle/1.webp",
+      "credit": "Phil Thomas via Wikimedia Commons (Alnwick Castle 02.jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alnwick_Castle_02.jpg"
+    },
+    {
+      "src": "/images/locations/alnwick-castle/2.webp",
+      "credit": "Thomas Quine via Wikimedia Commons (Castle at Alnwick panorama (27201950193).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Castle_at_Alnwick_panorama_(27201950193).jpg"
+    },
+    {
+      "src": "/images/locations/alnwick-castle/3.webp",
+      "credit": "gailhampshire from Cradley, Malvern, U.K via Wikimedia Commons (Alnwick Castle (46520242722).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alnwick_Castle_(46520242722).jpg"
+    }
+  ],
+  "glenfinnan-viaduct": [
+    {
+      "src": "/images/locations/glenfinnan-viaduct/1.webp",
+      "credit": "acediscovery via Wikimedia Commons (Glenfinnan-Viaduct Scotland.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glenfinnan-Viaduct_Scotland.jpg"
+    },
+    {
+      "src": "/images/locations/glenfinnan-viaduct/2.webp",
+      "credit": "Matthieu Riegler via Wikimedia Commons (Glenfinnan Viaduct - 2022 (cropped).jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glenfinnan_Viaduct_-_2022_(cropped).jpg"
+    },
+    {
+      "src": "/images/locations/glenfinnan-viaduct/3.webp",
+      "credit": "Photo taken by Flaxton via Wikimedia Commons (Glenfinnan bay.jpg)",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glenfinnan_bay.jpg"
+    }
+  ],
+  "hobbiton": [
+    {
+      "src": "/images/locations/hobbiton/1.webp",
+      "credit": "Jackie.lck (photos · photo sets) via Wikimedia Commons (Hobbit holes reflected in water.jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hobbit_holes_reflected_in_water.jpg"
+    },
+    {
+      "src": "/images/locations/hobbiton/2.webp",
+      "credit": "Andres Iga via Wikimedia Commons (Hobbiton Movie Set, Matamata.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hobbiton_Movie_Set,_Matamata.jpg"
+    }
+  ],
+  "kualoa-ranch": [
+    {
+      "src": "/images/locations/kualoa-ranch/1.webp",
+      "credit": "opapaty via Wikimedia Commons (Kualoa Ranch 2014.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kualoa_Ranch_2014.jpg"
+    },
+    {
+      "src": "/images/locations/kualoa-ranch/2.webp",
+      "credit": "opapaty via Wikimedia Commons (Kualoa Ranch (alternative).jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kualoa_Ranch_(alternative).jpg"
+    },
+    {
+      "src": "/images/locations/kualoa-ranch/3.webp",
+      "credit": "Prayitno / Thank you for (12 millions +) view from Los Angeles, USA via Wikimedia Commons (Kualoa Ranch (15606090355).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kualoa_Ranch_(15606090355).jpg"
+    }
+  ],
+  "zhangjiajie": [
+    {
+      "src": "/images/locations/zhangjiajie/1.webp",
+      "credit": "Kuruman from Tokyo, Japan via Wikimedia Commons (Zhangjiajie National Forest Park.jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zhangjiajie_National_Forest_Park.jpg"
+    },
+    {
+      "src": "/images/locations/zhangjiajie/2.webp",
+      "credit": "xiquinhosilva via Wikimedia Commons (Zhangjiajie National Forest Park 38023-Zhangjiajie (48757574461).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zhangjiajie_National_Forest_Park_38023-Zhangjiajie_(48757574461).jpg"
+    },
+    {
+      "src": "/images/locations/zhangjiajie/3.webp",
+      "credit": "xiquinhosilva via Wikimedia Commons (Zhangjiajie National Forest Park 37754-Zhangjiajie (48757570501).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zhangjiajie_National_Forest_Park_37754-Zhangjiajie_(48757570501).jpg"
+    }
+  ],
+  "pont-de-bir-hakeim": [
+    {
+      "src": "/images/locations/pont-de-bir-hakeim/1.webp",
+      "credit": "Pierre Blaché from Paris, France via Wikimedia Commons (Pont de Bir-Hakeim at night, Paris 3 February 2019.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pont_de_Bir-Hakeim_at_night,_Paris_3_February_2019.jpg"
+    },
+    {
+      "src": "/images/locations/pont-de-bir-hakeim/2.webp",
+      "credit": "Pierre Blaché from Paris, France via Wikimedia Commons (Bir-Hakeim bridge, Paris 24 June 2021.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bir-Hakeim_bridge,_Paris_24_June_2021.jpg"
+    },
+    {
+      "src": "/images/locations/pont-de-bir-hakeim/3.webp",
+      "credit": "ArtyElAnanas via Wikimedia Commons (Pont Bir-Hakeim 20231222.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pont_Bir-Hakeim_20231222.jpg"
+    }
+  ],
+  "kananaskis": [
+    {
+      "src": "/images/locations/kananaskis/1.webp",
+      "credit": "Kiwibirdman via Wikimedia Commons (Kananaskis Country - panoramio.jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kananaskis_Country_-_panoramio.jpg"
+    },
+    {
+      "src": "/images/locations/kananaskis/2.webp",
+      "credit": "Kiwibirdman via Wikimedia Commons (Kananaskis Country - panoramio - Kiwibirdman.jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kananaskis_Country_-_panoramio_-_Kiwibirdman.jpg"
+    }
+  ],
+  "skellig-michael": [
+    {
+      "src": "/images/locations/skellig-michael/1.webp",
+      "credit": "Ridiculopathy via Wikimedia Commons (Feb1987. Great Skellig aka Sceilig Mhór aka Sceilg Mhíchíl 03.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Feb1987._Great_Skellig_aka_Sceilig_Mh%C3%B3r_aka_Sceilg_Mh%C3%ADch%C3%ADl_03.jpg"
+    },
+    {
+      "src": "/images/locations/skellig-michael/2.webp",
+      "credit": "Ridiculopathy via Wikimedia Commons (Feb1987. Great Skellig aka Sceilig Mhór aka Sceilg Mhíchíl 04.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Feb1987._Great_Skellig_aka_Sceilig_Mh%C3%B3r_aka_Sceilg_Mh%C3%ADch%C3%ADl_04.jpg"
+    },
+    {
+      "src": "/images/locations/skellig-michael/3.webp",
+      "credit": "Ridiculopathy via Wikimedia Commons (Feb1987. Great Skellig aka Sceilig Mhór aka Sceilg Mhíchíl 01.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Feb1987._Great_Skellig_aka_Sceilig_Mh%C3%B3r_aka_Sceilg_Mh%C3%ADch%C3%ADl_01.jpg"
+    }
+  ],
+  "matmata": [
+    {
+      "src": "/images/locations/matmata/1.webp",
+      "credit": "Tanya Dedyukhina via Wikimedia Commons (Matmata - panoramio (14).jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Matmata_-_panoramio_(14).jpg"
+    },
+    {
+      "src": "/images/locations/matmata/2.webp",
+      "credit": "نعيم قربوسي via Wikimedia Commons (Madrassa de Sidi Moussa El Jemni 07.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Madrassa_de_Sidi_Moussa_El_Jemni_07.jpg"
+    },
+    {
+      "src": "/images/locations/matmata/3.webp",
+      "credit": "Oleg Seliverstov via Wikimedia Commons (New Matmata, Tunisia - panoramio - Oleg Seliverstov (1).jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:New_Matmata,_Tunisia_-_panoramio_-_Oleg_Seliverstov_(1).jpg"
+    }
+  ],
+  "petra": [
+    {
+      "src": "/images/locations/petra/1.webp",
+      "credit": "Vyacheslav Argenberg via Wikimedia Commons (Al-Khazneh (The Treasury) 2, Petra, Jordan.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Al-Khazneh_(The_Treasury)_2,_Petra,_Jordan.jpg"
+    },
+    {
+      "src": "/images/locations/petra/2.webp",
+      "credit": "Vyacheslav Argenberg via Wikimedia Commons (Al-Khazneh 2, Petra, Jordan.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Al-Khazneh_2,_Petra,_Jordan.jpg"
+    },
+    {
+      "src": "/images/locations/petra/3.webp",
+      "credit": "Ankur P via Wikimedia Commons (The Treasury (Al Khazneh) at Petra (18).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Treasury_(Al_Khazneh)_at_Petra_(18).jpg"
+    }
+  ],
+  "wadi-rum": [
+    {
+      "src": "/images/locations/wadi-rum/1.webp",
+      "credit": "Peter Chisholm via Wikimedia Commons (Wadi rum desert.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wadi_rum_desert.jpg"
+    },
+    {
+      "src": "/images/locations/wadi-rum/2.webp",
+      "credit": "Evan Qu wenhong via Wikimedia Commons (Wadi Rum Protected Area, Wadi Rum Village, Jordan (Unsplash cHiZUnL20xo).jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wadi_Rum_Protected_Area,_Wadi_Rum_Village,_Jordan_(Unsplash_cHiZUnL20xo).jpg"
+    },
+    {
+      "src": "/images/locations/wadi-rum/3.webp",
+      "credit": "Vyacheslav Argenberg via Wikimedia Commons (Wadi Rum, Jordan, Infinite spaces.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wadi_Rum,_Jordan,_Infinite_spaces.jpg"
+    }
+  ],
+  "salzburg": [
+    {
+      "src": "/images/locations/salzburg/1.webp",
+      "credit": "Gary Todd from Xinzheng, China via Wikimedia Commons (Salzburg Mirabell Castle & Gardens (9812824374).jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salzburg_Mirabell_Castle_%26_Gardens_(9812824374).jpg"
+    },
+    {
+      "src": "/images/locations/salzburg/2.webp",
+      "credit": "Skyguy414 at English Wikipedia via Wikimedia Commons (Gardens at the Palace of Mirabell.JPG)",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gardens_at_the_Palace_of_Mirabell.JPG"
+    }
+  ],
+  "trevi-fountain": [
+    {
+      "src": "/images/locations/trevi-fountain/1.webp",
+      "credit": "Wilfredor via Wikimedia Commons (Fontaine Trevi - Rome.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fontaine_Trevi_-_Rome.jpg"
+    },
+    {
+      "src": "/images/locations/trevi-fountain/2.webp",
+      "credit": "Diliff via Wikimedia Commons (Trevi Fountain, Rome, Italy 2 - May 2007.jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Trevi_Fountain,_Rome,_Italy_2_-_May_2007.jpg"
+    },
+    {
+      "src": "/images/locations/trevi-fountain/3.webp",
+      "credit": "RoyFokker via Wikimedia Commons (Fontana di Trevi di notte.JPG)",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fontana_di_Trevi_di_notte.JPG"
+    }
+  ],
+  "skopelos": [
+    {
+      "src": "/images/locations/skopelos/1.webp",
+      "credit": "Ant83 at Serbian Wikipedia via Wikimedia Commons (Grad Skopelos sa brda - Skopelos town from hill.JPG)",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grad_Skopelos_sa_brda_-_Skopelos_town_from_hill.JPG"
+    },
+    {
+      "src": "/images/locations/skopelos/2.webp",
+      "credit": "dronepicr via Wikimedia Commons (Ferry arriving in Skopelos Harbor, Greece (51696016893).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ferry_arriving_in_Skopelos_Harbor,_Greece_(51696016893).jpg"
+    }
+  ],
+  "glencoe": [
+    {
+      "src": "/images/locations/glencoe/1.webp",
+      "credit": "Lómelinde via Wikimedia Commons (Glen Coe A 82.JPG)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glen_Coe_A_82.JPG"
+    },
+    {
+      "src": "/images/locations/glencoe/2.webp",
+      "credit": "jtweedie1976 via Wikimedia Commons (Buachaille Etive Mor from Kingshouse Hotel.jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Buachaille_Etive_Mor_from_Kingshouse_Hotel.jpg"
+    }
+  ],
+  "maya-bay": [
+    {
+      "src": "/images/locations/maya-bay/1.webp",
+      "credit": "Vyacheslav Argenberg via Wikimedia Commons (Maya Bay, Koh Phi Phi, Krabi, Thailand.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Maya_Bay,_Koh_Phi_Phi,_Krabi,_Thailand.jpg"
+    },
+    {
+      "src": "/images/locations/maya-bay/2.webp",
+      "credit": "Vyacheslav Argenberg via Wikimedia Commons (Ko Phi Phi Leh definitive vertical limestone cliff as seen from the water, Thailand.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko_Phi_Phi_Leh_definitive_vertical_limestone_cliff_as_seen_from_the_water,_Thailand.jpg"
+    },
+    {
+      "src": "/images/locations/maya-bay/3.webp",
+      "credit": "Renek78 via Wikimedia Commons (Ko Phi Phi Le in early 2025 05.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko_Phi_Phi_Le_in_early_2025_05.jpg"
+    }
+  ],
+  "park-hyatt-tokyo": [
+    {
+      "src": "/images/locations/park-hyatt-tokyo/1.webp",
+      "credit": "Syced via Wikimedia Commons (Shinjuku Park Tower 8.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Shinjuku_Park_Tower_8.jpg"
+    },
+    {
+      "src": "/images/locations/park-hyatt-tokyo/2.webp",
+      "credit": "Syced via Wikimedia Commons (Shinjuku Park Tower 2.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Shinjuku_Park_Tower_2.jpg"
+    },
+    {
+      "src": "/images/locations/park-hyatt-tokyo/3.webp",
+      "credit": "Syced via Wikimedia Commons (Shinjuku Park Tower 7.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Shinjuku_Park_Tower_7.jpg"
+    }
+  ],
+  "burj-khalifa": [
+    {
+      "src": "/images/locations/burj-khalifa/1.webp",
+      "credit": "ECWiki1 via Wikimedia Commons (Burj Khalifa Dubai, UAE at Sunset 001 by Eric Chamchoum.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Burj_Khalifa_Dubai,_UAE_at_Sunset_001_by_Eric_Chamchoum.jpg"
+    },
+    {
+      "src": "/images/locations/burj-khalifa/2.webp",
+      "credit": "Meandmybrix via Wikimedia Commons (Burj Khalifa Image.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Burj_Khalifa_Image.jpg"
+    },
+    {
+      "src": "/images/locations/burj-khalifa/3.webp",
+      "credit": "Aspere via Wikimedia Commons (Front view from Burj Khalifa Metro Station.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_view_from_Burj_Khalifa_Metro_Station.jpg"
+    }
+  ],
+  "svinafellsjokull": [
+    {
+      "src": "/images/locations/svinafellsjokull/1.webp",
+      "credit": "Jakub Hałun via Wikimedia Commons (View of Svínafellsjökull glacier from Route 1 in Hornafjörður municipality, Iceland, 20240718 1433 2043.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:View_of_Sv%C3%ADnafellsj%C3%B6kull_glacier_from_Route_1_in_Hornafj%C3%B6r%C3%B0ur_municipality,_Iceland,_20240718_1433_2043.jpg"
+    },
+    {
+      "src": "/images/locations/svinafellsjokull/2.webp",
+      "credit": "Mikołaj Bańka via Wikimedia Commons (Svínafellsjökull glacier at sunset.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sv%C3%ADnafellsj%C3%B6kull_glacier_at_sunset.jpg"
+    },
+    {
+      "src": "/images/locations/svinafellsjokull/3.webp",
+      "credit": "Alexander Grebenkov via Wikimedia Commons (Svínafellsjökull closer view from Road 1, Iceland (July 2019).jpg)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sv%C3%ADnafellsj%C3%B6kull_closer_view_from_Road_1,_Iceland_(July_2019).jpg"
+    }
+  ],
+  "namib-desert": [
+    {
+      "src": "/images/locations/namib-desert/1.webp",
+      "credit": "Sonse via Wikimedia Commons (Mountains and Dunes in Namib Desert (37689490936).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mountains_and_Dunes_in_Namib_Desert_(37689490936).jpg"
+    },
+    {
+      "src": "/images/locations/namib-desert/2.webp",
+      "credit": "Sonse via Wikimedia Commons (Mountains and Dunes in Namib Desert (37705972602).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mountains_and_Dunes_in_Namib_Desert_(37705972602).jpg"
+    },
+    {
+      "src": "/images/locations/namib-desert/3.webp",
+      "credit": "Vicartb via Wikimedia Commons (Sossusvlei Dunes Namib.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sossusvlei_Dunes_Namib.jpg"
+    }
+  ],
+  "fifth-avenue-tiffany": [
+    {
+      "src": "/images/locations/fifth-avenue-tiffany/1.webp",
+      "credit": "ajay_suresh via Wikimedia Commons (Tiffany and Company Building (51878871095).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tiffany_and_Company_Building_(51878871095).jpg"
+    },
+    {
+      "src": "/images/locations/fifth-avenue-tiffany/2.webp",
+      "credit": "Kidfly182 via Wikimedia Commons (One Fifth Avenue 001.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:One_Fifth_Avenue_001.jpg"
+    }
+  ],
+  "mumbai": [
+    {
+      "src": "/images/locations/mumbai/1.webp",
+      "credit": "Sntshkumar750 via Wikimedia Commons (Chhatrapati Shivaji Maharaj Terminus, Mumbai city.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chhatrapati_Shivaji_Maharaj_Terminus,_Mumbai_city.jpg"
+    },
+    {
+      "src": "/images/locations/mumbai/2.webp",
+      "credit": "DesiBoy101 via Wikimedia Commons (Chhatrapati Shivaji Maharaj Terminus clock at the suburban train section.jpg)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chhatrapati_Shivaji_Maharaj_Terminus_clock_at_the_suburban_train_section.jpg"
+    },
+    {
+      "src": "/images/locations/mumbai/3.webp",
+      "credit": "https://reddit.com/u/AffectionateMind26 via Wikimedia Commons (Mumbai Skyline Sunrise.jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mumbai_Skyline_Sunrise.jpg"
+    }
+  ],
+  "monument-valley": [
+    {
+      "src": "/images/locations/monument-valley/1.webp",
+      "credit": "Huebi via Wikimedia Commons (Monument Valley 2.jpg)",
+      "license": "CC BY 2.0 de",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Monument_Valley_2.jpg"
+    },
+    {
+      "src": "/images/locations/monument-valley/2.webp",
+      "credit": "Mgimelfarb via Wikimedia Commons (Monument Valley Arizona Panoramic.jpg)",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Monument_Valley_Arizona_Panoramic.jpg"
+    },
+    {
+      "src": "/images/locations/monument-valley/3.webp",
+      "credit": "NASA/METI/AIST/Japan Space Systems, and U.S./Japan ASTER Science Team via Wikimedia Commons (Monument Valley (ASTER).jpg)",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Monument_Valley_(ASTER).jpg"
+    }
+  ],
+  "dubrovnik": [
+    {
+      "src": "/images/locations/dubrovnik/1.webp",
+      "credit": "Nan Palmero from San Antonio, TX, USA via Wikimedia Commons (Dubrovnik (53324923726).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dubrovnik_(53324923726).jpg"
+    },
+    {
+      "src": "/images/locations/dubrovnik/2.webp",
+      "credit": "Nan Palmero from San Antonio, TX, USA via Wikimedia Commons (Dubrovnik (53325263634).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dubrovnik_(53325263634).jpg"
+    },
+    {
+      "src": "/images/locations/dubrovnik/3.webp",
+      "credit": "donald judge via Wikimedia Commons (29.12.16 Dubrovnik Old Town 032 (31919533716).jpg)",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:29.12.16_Dubrovnik_Old_Town_032_(31919533716).jpg"
+    }
+  ]
+}

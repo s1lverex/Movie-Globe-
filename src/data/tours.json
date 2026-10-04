@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fantasy-realms",
+    "name": "Fantasy Realms",
+    "tagline": "Castles, wizards and the Shire.",
+    "stops": ["alnwick-castle", "glenfinnan-viaduct", "skellig-michael", "hobbiton"]
+  },
+  {
+    "id": "desert-epics",
+    "name": "Desert Epics",
+    "tagline": "Sand, stone and sun-scorched legends.",
+    "stops": ["matmata", "petra", "wadi-rum", "burj-khalifa", "namib-desert"]
+  },
+  {
+    "id": "romance-in-europe",
+    "name": "Romance in Europe",
+    "tagline": "Fountains, gardens and island weddings.",
+    "stops": ["pont-de-bir-hakeim", "salzburg", "trevi-fountain", "skopelos"]
+  },
+  {
+    "id": "sci-fi-worlds",
+    "name": "Sci-Fi Worlds",
+    "tagline": "Alien planets hiding on Earth.",
+    "stops": ["svinafellsjokull", "skellig-michael", "dubrovnik", "zhangjiajie", "kualoa-ranch"]
+  }
+]
