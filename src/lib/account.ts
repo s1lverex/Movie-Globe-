@@ -69,14 +69,28 @@ function snapshot(): SyncData {
   };
 }
 
+/**
+ * Auto-save only runs after this device has pulled and merged the account's
+ * data; otherwise a slow first pull could let a fresh device upload its empty
+ * state over the account. `applying` skips the redundant save that applying
+ * the merged data would otherwise schedule.
+ */
+let synced = false;
+let applying = false;
+
 function apply(d: SyncData) {
-  useAppStore.setState({
-    character: d.character,
-    visited: d.visited,
-    saved: d.saved,
-    places: d.places,
-    appMode: d.appMode,
-  });
+  applying = true;
+  try {
+    useAppStore.setState({
+      character: d.character,
+      visited: d.visited,
+      saved: d.saved,
+      places: d.places,
+      appMode: d.appMode,
+    });
+  } finally {
+    applying = false;
+  }
 }
 
 async function push(): Promise<void> {
@@ -95,9 +109,11 @@ async function push(): Promise<void> {
 
 /** Pull the account's data, merge with this device, then save the result back. */
 async function pullAndMerge(): Promise<void> {
+  synced = false;
   useAccount.setState({ syncState: 'syncing' });
   const r = await api<{ data: Partial<SyncData> | null }>('/sync');
   apply(mergeSync(snapshot(), r.data));
+  synced = true;
   await push();
 }
 
@@ -142,19 +158,23 @@ export async function logout(): Promise<void> {
   try {
     await api('/auth/logout', { method: 'POST' });
   } finally {
+    synced = false;
+    clearTimeout(timer);
     useAccount.setState({ status: 'signedOut', user: null, syncState: 'idle', lastSynced: null });
   }
 }
 
 export async function deleteAccount(password: string): Promise<void> {
   await api('/account', { method: 'DELETE', body: JSON.stringify({ password }) });
+  synced = false;
+  clearTimeout(timer);
   useAccount.setState({ status: 'signedOut', user: null, syncState: 'idle', lastSynced: null });
 }
 
 /** Auto-save: push synced fields to the account shortly after they change. */
 let timer: ReturnType<typeof setTimeout> | undefined;
 useAppStore.subscribe((s, prev) => {
-  if (useAccount.getState().status !== 'signedIn') return;
+  if (useAccount.getState().status !== 'signedIn' || !synced || applying) return;
   if (
     s.character === prev.character &&
     s.visited === prev.visited &&
