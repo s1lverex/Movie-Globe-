@@ -26,6 +26,7 @@ export const CHARACTER_SCALE = 0.06;
 const WALK = 0.07; // rad/s
 const RUN = 0.18;
 const TURN = 5; // rad/s
+const FOLLOW_TURN = 1.8; // rad/s, steering in follow view
 const ARRIVAL_RAD = ARRIVAL_KM / 6371;
 
 const _axis = new Vector3();
@@ -234,15 +235,29 @@ export function PlayerCharacter() {
       if (mag > 0.08) {
         if (store.walkTarget) store.setWalkTarget(null);
         if (store.travel?.mode === 'walk') store.startTravel(null);
+        const run = runtime.run || runtime.joystick.x ** 2 + runtime.joystick.y ** 2 > 0.85;
+        if (store.cameraMode === 'follow') {
+          // Follow (third-person) view: steering controls. Camera-relative input
+          // would feed back on itself here (turn → camera swings → "right" moves
+          // → turn again) and spin the explorer in circles.
+          const turn = -ix * FOLLOW_TURN * dt;
+          _q.setFromAxisAngle(runtime.pos, turn);
+          runtime.forward.applyQuaternion(_q);
+          tangent(runtime.forward, runtime.pos, runtime.forward).normalize();
+          if (Math.abs(iy) > 0.08) {
+            step((run ? RUN : WALK) * Math.max(-0.6, Math.min(1, iy)) * dt);
+            moving = run && iy > 0 ? 2 : 1;
+          }
+          runtime.lastInteraction = performance.now();
+        }
         _right.set(1, 0, 0).applyQuaternion(camera.quaternion);
         _v2.set(0, 1, 0).applyQuaternion(camera.quaternion);
         tangent(_right, runtime.pos, _right);
         tangent(_v2, runtime.pos, _v2);
         const desired = _v.set(0, 0, 0).addScaledVector(_right, ix).addScaledVector(_v2, iy);
-        if (desired.lengthSq() > 1e-8) {
+        if (store.cameraMode !== 'follow' && desired.lengthSq() > 1e-8) {
           desired.normalize();
           const off = turnToward(desired.clone(), TURN * dt);
-          const run = runtime.run || runtime.joystick.x ** 2 + runtime.joystick.y ** 2 > 0.85;
           const sp = (run ? RUN : WALK) * mag * (off > 1.5 ? 0.3 : 1);
           step(sp * dt);
           moving = run ? 2 : 1;

@@ -18,7 +18,14 @@ export default function AboutPage() {
             <li>Drag to orbit, scroll / pinch to zoom.</li>
             <li>WASD or arrow keys to walk (Shift to run), or use the joystick on touch screens.</li>
             <li>Tap anywhere on the globe to walk there; tap a pin for details, Walk there or Fly there.</li>
-            <li>Press F to toggle the follow camera.</li>
+            <li>
+              Press F (or the camera button) for the follow view: there the joystick / keys steer — left/right
+              turns, up/down walks forward/back.
+            </li>
+            <li>
+              Nearby landmarks and cities pop up as you travel; in Normal Mode tap one to plan a trip there.
+            </li>
+            <li>Sign in under Account to sync your trips, diary, stamps and character across devices.</li>
           </ul>
         </div>
         <p className="rounded-2xl border border-amber-300/20 bg-amber-300/5 p-3 text-xs text-amber-100">
