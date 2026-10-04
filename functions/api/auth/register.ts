@@ -1,3 +1,4 @@
+import { appUrl, sendEmail, welcomeEmail } from '../_email';
 import {
   EMAIL_RE,
   clientIp,
@@ -18,7 +19,7 @@ interface Body {
   displayName?: string;
 }
 
-export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> => {
+export const onRequestPost = async ({ request, env, waitUntil }: Ctx): Promise<Response> => {
   if (!sameOrigin(request)) return error(403, 'Cross-origin request blocked');
   const body = await readJson<Body>(request);
   const email = body?.email?.trim().toLowerCase() ?? '';
@@ -40,5 +41,7 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
     .bind(user.id, email, displayName, await hashPassword(password), Date.now())
     .run();
   const cookie = await createSession(env, request, user.id);
+  // Welcome email (Resend) is sent in the background; sign-up never waits on it.
+  waitUntil(sendEmail(env, { to: email, ...welcomeEmail(displayName, appUrl(env, request)) }));
   return json({ user: publicUser(user) }, 201, { 'set-cookie': cookie });
 };

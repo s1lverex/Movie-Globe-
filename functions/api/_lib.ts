@@ -5,7 +5,9 @@
  * Sessions: random 256-bit token in an HttpOnly cookie; only its SHA-256 hash
  * is stored in the database.
  */
-export interface Env {
+import type { EmailEnv } from './_email';
+
+export interface Env extends EmailEnv {
   DB: D1Database;
 }
 
@@ -90,6 +92,11 @@ function cookieAttrs(req: Request): string {
 export async function createSession(env: Env, req: Request, userId: string): Promise<string> {
   const token = randomToken();
   const now = Date.now();
+  // Housekeeping: drop expired sessions and spent reset tokens.
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM sessions WHERE expires_at < ?').bind(now),
+    env.DB.prepare('DELETE FROM password_resets WHERE expires_at < ?').bind(now),
+  ]);
   await env.DB.prepare(
     'INSERT INTO sessions (token_hash, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)',
   )

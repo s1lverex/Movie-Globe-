@@ -166,3 +166,18 @@ useAppStore.subscribe((s, prev) => {
   clearTimeout(timer);
   timer = setTimeout(() => void push(), 1500);
 });
+
+/** Emails a reset link if the account exists (the response never says either way). */
+export async function requestPasswordReset(email: string): Promise<void> {
+  await api('/auth/forgot', { method: 'POST', body: JSON.stringify({ email }) });
+}
+
+/** Sets a new password from an emailed reset link and signs in. */
+export async function resetPassword(token: string, password: string): Promise<void> {
+  const r = await api<{ user: AccountUser }>('/auth/reset', {
+    method: 'POST',
+    body: JSON.stringify({ token, password }),
+  });
+  track('account_reset');
+  await signedIn(r.user);
+}

@@ -1,11 +1,88 @@
 import { useState } from 'react';
 import { CheckCircle2, CloudOff, Loader2, LogOut, Trash2, UserRound } from 'lucide-react';
-import { ApiError, deleteAccount, initAccount, login, logout, register, useAccount } from '../lib/account';
+import {
+  ApiError,
+  deleteAccount,
+  initAccount,
+  login,
+  logout,
+  register,
+  requestPasswordReset,
+  useAccount,
+} from '../lib/account';
 import { useAppStore } from '../store/useAppStore';
 import { Overlay } from '../ui/Overlay';
 
 const field =
   'w-full rounded-xl border border-white/10 bg-[#0B1220] px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-accent focus:outline-none';
+
+function ForgotPassword({ initialEmail }: { initialEmail: string }) {
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState(initialEmail);
+  const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
+  const [err, setErr] = useState('');
+  if (!open)
+    return (
+      <button
+        type="button"
+        className="mt-3 w-full text-center text-xs text-[#9CC2FF] hover:underline"
+        onClick={() => {
+          setEmail(initialEmail);
+          setOpen(true);
+        }}
+        data-testid="forgot-open"
+      >
+        Forgot password?
+      </button>
+    );
+  return (
+    <form
+      className="mt-4 space-y-2 rounded-2xl border border-white/10 p-3"
+      data-testid="forgot-form"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setState('busy');
+        setErr('');
+        try {
+          await requestPasswordReset(email);
+          setState('sent');
+        } catch (x) {
+          setErr(x instanceof ApiError ? x.message : 'Something went wrong.');
+          setState('idle');
+        }
+      }}
+    >
+      {state === 'sent' ? (
+        <p className="text-sm text-emerald-300" role="status" data-testid="forgot-sent">
+          If an account exists for that email, we’ve sent a reset link. It expires in 30 minutes.
+        </p>
+      ) : (
+        <>
+          <label className="block space-y-1">
+            <span className="text-xs text-slate-400">Email for the reset link</span>
+            <input
+              className={field}
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+          </label>
+          {err && <p className="text-xs text-rose-300">{err}</p>}
+          <button
+            type="submit"
+            className="btn-ghost w-full text-sm"
+            disabled={state === 'busy'}
+            data-testid="forgot-submit"
+          >
+            {state === 'busy' && <Loader2 size={14} className="animate-spin" />} Email me a reset link
+          </button>
+        </>
+      )}
+    </form>
+  );
+}
 
 function AuthForm() {
   const [tab, setTab] = useState<'login' | 'register'>('login');
@@ -101,6 +178,7 @@ function AuthForm() {
           {tab === 'login' ? 'Sign in' : 'Create account'}
         </button>
       </form>
+      {tab === 'login' && <ForgotPassword initialEmail={email} />}
       <p className="mt-4 text-xs text-slate-400">
         An account keeps your trips, travel diary, passport stamps, saved places and character in sync across
         devices. Without one, everything is saved on this device only.

@@ -32,6 +32,7 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const TripsPage = lazy(() => import('./pages/TripsPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
 const TravelSummaryPage = lazy(() => import('./pages/TravelSummaryPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 
 /** Mode-specific pages switch the app into their mode (supports deep links). */
 function ModeGate({ mode, children }: { mode: AppMode; children: ReactNode }) {
@@ -108,7 +109,7 @@ export default function App() {
   const selected = /^\/(location|place)\//.test(pathname) ? pathname : null;
   // The Travel Summary replay takes over the screen: hide the live controls.
   const replaying = pathname === '/summary';
-  const overlay = /^\/(saved|tours|trips|account)$/.test(pathname)
+  const overlay = /^\/(saved|tours|trips|account|reset-password)$/.test(pathname)
     ? 'narrow'
     : /^\/(passport|about)$/.test(pathname)
       ? 'wide'
@@ -203,6 +204,14 @@ export default function App() {
             element={
               <Suspense fallback={null}>
                 <TravelSummaryPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <Suspense fallback={null}>
+                <ResetPasswordPage />
               </Suspense>
             }
           />

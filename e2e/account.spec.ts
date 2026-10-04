@@ -64,3 +64,55 @@ test('register, sync a trip, sign in on another device and see it', async ({ pag
   await expect(page2.getByTestId('auth-form')).toBeVisible({ timeout: 20_000 });
   await ctx2.close();
 });
+
+test('forgot password → emailed link → new password works, old one does not', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'server flow covered once');
+  test.setTimeout(120_000);
+  const { execSync } = await import('node:child_process');
+  const { createHash } = await import('node:crypto');
+  const email = `reset-${Date.now()}@example.com`;
+  await setup(page);
+  await page.goto('/account');
+  await page.getByRole('tab', { name: 'Create account' }).click();
+  await page.getByLabel('Email').fill(email);
+  await page.getByLabel(/Password/).fill('old-password-1');
+  await page.getByTestId('auth-submit').click();
+  await expect(page.getByTestId('account-name')).toBeVisible({ timeout: 20_000 });
+  await page.getByTestId('logout').click();
+
+  // Request a reset (same response whether or not the account exists).
+  await page.getByTestId('forgot-open').click();
+  await page.getByTestId('forgot-form').getByRole('textbox').fill(email);
+  await page.getByTestId('forgot-submit').click();
+  await expect(page.getByTestId('forgot-sent')).toBeVisible();
+
+  // Simulate the emailed link: plant a known token for this user in local D1.
+  const token = `e2e-token-${Date.now()}`;
+  const hash = createHash('sha256').update(token).digest('base64url');
+  execSync(
+    `npx wrangler d1 execute travel-globe --local --command "INSERT INTO password_resets (token_hash, user_id, created_at, expires_at) SELECT '${hash}', id, 0, 9999999999999 FROM users WHERE email = '${email}'"`,
+    { stdio: 'ignore', env: { ...process.env, WRANGLER_SEND_METRICS: 'false' } },
+  );
+
+  await page.goto(`/reset-password?token=${token}`);
+  await page.getByLabel('New password (min. 8 characters)').fill('new-password-2');
+  await page.getByLabel('Repeat new password').fill('new-password-2');
+  await page.getByTestId('reset-submit').click();
+  await expect(page.getByTestId('account-name')).toBeVisible({ timeout: 20_000 });
+
+  // The link is single-use.
+  await page.goto(`/reset-password?token=${token}`);
+  await page.getByLabel('New password (min. 8 characters)').fill('another-pass-3');
+  await page.getByLabel('Repeat new password').fill('another-pass-3');
+  await page.getByTestId('reset-submit').click();
+  await expect(page.getByRole('alert')).toContainText('invalid or has expired');
+
+  // Old password rejected, new one accepted.
+  const login = (pw: string) =>
+    page.request.post('/api/auth/login', {
+      data: { email, password: pw },
+      headers: { 'content-type': 'application/json' },
+    });
+  expect((await login('old-password-1')).status()).toBe(401);
+  expect((await login('new-password-2')).status()).toBe(200);
+});
