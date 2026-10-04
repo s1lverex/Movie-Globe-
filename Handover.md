@@ -33,6 +33,19 @@
   - Flights and car hire still pass only the destination airport. Trip.com's bot challenge blocks verifying those from a server, and flights need a departure city that the app doesn't know. Normal Mode places (arbitrary spots) can't be resolved to Trip.com IDs from the browser (no public API / CORS), so they fall back to keyword search. The Trip.com mobile app may also drop URL parameters when it intercepts the link.
 - **`.env`** is now committed as a template with empty slots: geocoder provider/URL/key (LocationIQ or custom Nominatim-compatible endpoints work today), map keys, affiliate IDs, and server-only travel API secrets (reserved). Real values go in `.env.local` (git-ignored). Typed access is in `src/lib/config.ts`.
 
+### Follow-view steering, accounts, nearby landmarks (follow-up 4)
+
+- **Follow-view spin bug:** in the follow camera the input was camera-relative, which fed back on itself (turn → camera swings → "right" moves → turn again). The follow view now uses steering: left/right turns, up/down walks forward/back. The orbit view keeps camera-relative input.
+- **Accounts:** Cloudflare Pages Functions (`functions/api/*`) + D1 (SQLite; `migrations/0001_accounts.sql`). The endpoints are register, login, logout, me, sync (GET/PUT, max 256 KB) and account delete. Security:
+  - PBKDF2-SHA256 with 100k iterations and a per-user salt
+  - 256-bit session tokens, stored hashed, in an HttpOnly SameSite=Lax cookie (Secure on https)
+  - Origin check on writes
+  - per-IP and per-email rate limits
+  - generic "wrong email or password" errors
+  
+  The client (`src/lib/account.ts`, `src/lib/sync.ts`) merges this device with the account on sign-in (union of places, stamps and favourites; the account's copy wins on conflicts) and auto-saves changes 1.5 s after they happen. Known limits: no email verification or password reset (both need an email service). Deletions on one device can come back after merging with another device's offline copy, because there are no tombstones.
+- **Nearby landmarks:** `src/scene/NearbyLandmarks.tsx` with 121 curated landmarks + about 790 capitals and large cities from Natural Earth (`src/data/places.json`, lazy-loaded, ~25 KB gzip; rebuilt by `scripts/build_places.py`). The search radius adapts to zoom (250–1,600 km in the orbit view, 450 km in the follow view). Labels are laid out in screen space so they never overlap each other, the explorer or the controls; crowded ones slide into a callout column with a dashed leader line. Tapping one in Normal Mode starts planning a trip there.
+
 ## 2. Run / build / deploy
 
 See README. Deploy: import the repo in Vercel or Netlify (free tier); build `npm run build`, output `dist/`. SPA rewrites are configured so `/location/<slug>` deep links work.

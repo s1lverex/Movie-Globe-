@@ -28,7 +28,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}', 'textures/earth/*_2k.webp'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-        navigateFallbackDenylist: [/^\/images\//],
+        navigateFallbackDenylist: [/^\/images\//, /^\/api\//],
         runtimeCaching: [
           {
             urlPattern: ({ url }) =>
@@ -40,6 +40,10 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    // `npm run dev:api` serves the account API (Pages Functions + local D1) on :8788.
+    proxy: { '/api': 'http://127.0.0.1:8788' },
+  },
   build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {

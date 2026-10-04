@@ -7,3 +7,5 @@ dev-dist
 *.local
 playwright-report
 test-results
+.wrangler
+.dev.vars

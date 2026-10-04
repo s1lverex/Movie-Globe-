@@ -1,0 +1,16 @@
+# Local development / migrations config for the account API.
+#
+# Intentionally NO `pages_build_output_dir`: Cloudflare Pages ignores this file
+# on deploy, so your existing pages.dev deploys keep working before the
+# database exists. In production, bind the D1 database to the Pages project in
+# the dashboard (Settings → Bindings → D1 → variable name `DB`). See README.
+name = "travel-globe"
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "travel-globe"
+# Local placeholder. For production, replace with the id printed by
+# `npx wrangler d1 create travel-globe` before running `npm run db:migrate:remote`.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

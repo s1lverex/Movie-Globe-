@@ -158,3 +158,15 @@ test('mobile joystick is shown and moves the explorer', async ({ page, isMobile 
   );
   expect(after).not.toEqual(before);
 });
+
+test('nearby landmarks pop up in the top-down and follow views', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/');
+  await expect(page.getByTestId('loading')).toBeHidden({ timeout: 60_000 });
+  const labels = page.getByTestId('nearby-landmark');
+  await expect(labels.first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole('button', { name: /Big Ben, United Kingdom/ })).toBeVisible();
+  await page.getByRole('button', { name: 'Switch to follow camera' }).click();
+  await page.waitForTimeout(2500);
+  await expect(labels.first()).toBeVisible();
+});

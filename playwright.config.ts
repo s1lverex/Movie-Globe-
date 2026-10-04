@@ -19,9 +19,11 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 375, height: 812 } } },
   ],
   webServer: {
-    command: 'npm run build && npx vite preview --port 4173 --host 127.0.0.1',
+    // Real stack: static build + Pages Functions + local D1 (SQLite) via wrangler.
+    command: 'npm run preview:full',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
+    timeout: 240_000,
+    env: { WRANGLER_SEND_METRICS: 'false' },
   },
 });

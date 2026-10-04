@@ -2,6 +2,7 @@ import { Component, lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { LOCATION_BY_SLUG } from './data';
 import { registerNavigate } from './lib/nav';
+import { initAccount } from './lib/account';
 import { track } from './lib/analytics';
 import { Scene } from './scene/Scene';
 import { useAppStore } from './store/useAppStore';
@@ -29,6 +30,7 @@ const ToursPage = lazy(() => import('./pages/ToursPage'));
 const PassportPage = lazy(() => import('./pages/PassportPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const TripsPage = lazy(() => import('./pages/TripsPage'));
+const AccountPage = lazy(() => import('./pages/AccountPage'));
 
 /** Mode-specific pages switch the app into their mode (supports deep links). */
 function ModeGate({ mode, children }: { mode: AppMode; children: ReactNode }) {
@@ -103,7 +105,7 @@ export default function App() {
   const touch = useTouchDevice();
   const { pathname } = useLocation();
   const selected = /^\/(location|place)\//.test(pathname) ? pathname : null;
-  const overlay = /^\/(saved|tours|trips)$/.test(pathname)
+  const overlay = /^\/(saved|tours|trips|account)$/.test(pathname)
     ? 'narrow'
     : /^\/(passport|about)$/.test(pathname)
       ? 'wide'
@@ -115,6 +117,7 @@ export default function App() {
   const appMode = useAppStore((s) => s.appMode);
 
   useEffect(() => registerNavigate((to) => navigate(to)), [navigate]);
+  useEffect(() => void initAccount(), []);
   const webgl = typeof document !== 'undefined' && hasWebGL();
   useEffect(() => {
     if (!webgl) setListView(true);
@@ -182,6 +185,14 @@ export default function App() {
           <Route path="/" element={null} />
           <Route path="/location/:slug" element={<LocationRoute desktop={desktop} />} />
           <Route path="/place/:id" element={<PlaceRoute desktop={desktop} />} />
+          <Route
+            path="/account"
+            element={
+              <Suspense fallback={null}>
+                <AccountPage />
+              </Suspense>
+            }
+          />
           <Route
             path="/trips"
             element={

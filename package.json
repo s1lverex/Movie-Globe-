@@ -5,13 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && tsc -p functions/tsconfig.json && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc -b",
+    "typecheck": "tsc -b && tsc -p functions/tsconfig.json",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "db:migrate:local": "wrangler d1 migrations apply travel-globe --local",
+    "db:migrate:remote": "wrangler d1 migrations apply travel-globe --remote",
+    "dev:api": "npm run build && npm run db:migrate:local && wrangler pages dev dist --port 8788 --ip 127.0.0.1 --d1 DB=00000000-0000-0000-0000-000000000000 --compatibility-date=2025-09-01",
+    "preview:full": "npm run build && npm run db:migrate:local && wrangler pages dev dist --port 4173 --ip 127.0.0.1 --d1 DB=00000000-0000-0000-0000-000000000000 --compatibility-date=2025-09-01"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
@@ -26,6 +30,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261004.1",
     "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
@@ -46,6 +51,7 @@
     "typescript-eslint": "^8.71.0",
     "vite": "^6.4.3",
     "vite-plugin-pwa": "^1.3.0",
-    "vitest": "^3.2.7"
+    "vitest": "^3.2.7",
+    "wrangler": "^4.147.0"
   }
 }

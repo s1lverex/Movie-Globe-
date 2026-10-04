@@ -21,6 +21,22 @@ npm test             # Vitest unit tests
 npm run test:e2e     # Playwright (builds + previews automatically)
 ```
 
+## Accounts (free: Cloudflare Pages Functions + D1/SQLite)
+
+Sign-in syncs trips, diary, passport stamps, favourites and the character across devices. The API lives in `functions/api/` (Pages Functions) with a D1 database (Cloudflare's free SQLite) defined in `migrations/`. Passwords are hashed with PBKDF2-SHA256, sessions use HttpOnly cookies, cross-site writes are rejected, and sign-in attempts are rate-limited. Without the API the app still works and keeps data on the device; the Account page then says accounts aren't available.
+
+**Local:** `npm run dev:api` (API + local SQLite on :8788) alongside `npm run dev` (Vite proxies `/api`). `npm run preview:full` serves the whole stack on :4173 (this is what the E2E tests use).
+
+**Production (one-time, free tier):**
+
+1. `npx wrangler login`
+2. `npx wrangler d1 create travel-globe`, then paste the printed `database_id` into `wrangler.toml`.
+3. `npm run db:migrate:remote` creates the tables.
+4. In the Cloudflare dashboard, open the Pages project → Settings → Bindings → add a **D1 database** binding with variable name **`DB`** → select `travel-globe` (for Production and Preview).
+5. Redeploy. `functions/` is picked up automatically by Pages.
+
+`wrangler.toml` deliberately has no `pages_build_output_dir`, so Pages ignores it and deploys keep working before step 4.
+
 ## Configuration (`.env`)
 
 The app runs on free services only. `.env` lists every slot for future paid providers (geocoding, maps, travel APIs, affiliate IDs), all empty by default. Put real keys in **`.env.local`** (git-ignored, overrides `.env`). Never put secrets in `VITE_*` variables: those are bundled into the browser. Server-only keys need a backend.
