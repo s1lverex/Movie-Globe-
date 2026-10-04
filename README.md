@@ -31,7 +31,13 @@ Sign-in syncs trips, diary, passport stamps, favourites and the character across
 
 **Local:** `npm run dev:api` (API + local SQLite on :8788) alongside `npm run dev` (Vite proxies `/api`). `npm run preview:full` serves the whole stack on :4173 (this is what the E2E tests use).
 
-**Production (one-time, free tier):**
+**Deployed setup (Cloudflare account already prepared):** Pages project `travel-globe` (https://travel-globe-32r.pages.dev) with the D1 database `travel-globe` bound as `DB` (migrations 0001–0002 applied), and `RESEND_API_KEY` stored as an encrypted Pages secret. To deploy, either add the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets so `.github/workflows/deploy.yml` deploys on every push, or run `npm run build && npx wrangler pages deploy dist --project-name travel-globe --branch main` locally after `npx wrangler login`.
+
+Smoke-test a live deployment: `PLAYWRIGHT_BASE_URL=https://travel-globe-32r.pages.dev npx playwright test e2e/account.spec.ts e2e/summary.spec.ts` (test sign-ups use Resend's `delivered+…@resend.dev` sink and are deleted afterwards).
+
+**Email (Resend):** sign-up sends a welcome email and "Forgot password?" sends a single-use reset link (30 min). Optional env vars on the Pages project: `RESEND_FROM` (e.g. `Travel Globe <noreply@interesting-lab.com>` once that domain is verified in Resend; default `onboarding@resend.dev`, which Resend only lets you send to your own address) and `APP_URL` (defaults to the request's origin).
+
+**Production from scratch (one-time, free tier):**
 
 1. `npx wrangler login`
 2. `npx wrangler d1 create travel-globe`, then paste the printed `database_id` into `wrangler.toml`.

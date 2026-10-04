@@ -14,7 +14,9 @@ async function setup(page: Page) {
 
 test('register, sync a trip, sign in on another device and see it', async ({ page, browser, isMobile }) => {
   test.setTimeout(180_000);
-  const email = `e2e-${Date.now()}-${Math.random().toString(36).slice(2, 6)}@example.com`;
+  // Live runs use Resend's test inbox so the welcome email is accepted without emailing anyone.
+  const tag = `e2e-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const email = process.env.PLAYWRIGHT_BASE_URL ? `delivered+${tag}@resend.dev` : `${tag}@example.com`;
   await setup(page);
   await page.goto('/account');
   await page.getByRole('tab', { name: 'Create account' }).click();
@@ -63,10 +65,18 @@ test('register, sync a trip, sign in on another device and see it', async ({ pag
   await page2.reload();
   await expect(page2.getByTestId('auth-form')).toBeVisible({ timeout: 20_000 });
   await ctx2.close();
+
+  // Clean up: delete the test account (first device is still signed in).
+  const del = await page.request.delete('/api/account', {
+    data: { password: 'correct-horse-1' },
+    headers: { 'content-type': 'application/json' },
+  });
+  expect(del.status()).toBe(200);
 });
 
 test('forgot password → emailed link → new password works, old one does not', async ({ page, isMobile }) => {
   test.skip(isMobile, 'server flow covered once');
+  test.skip(!!process.env.PLAYWRIGHT_BASE_URL, 'plants a token in the local D1 database');
   test.setTimeout(120_000);
   const { execSync } = await import('node:child_process');
   const { createHash } = await import('node:crypto');
