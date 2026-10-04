@@ -192,7 +192,7 @@ export const useAppStore = create<AppState>()(
       toast: (t) => {
         const id = toastId++;
         set((s) => ({ toasts: [...s.toasts.slice(-3), { ...t, id }] }));
-        setTimeout(() => get().dismissToast(id), t.kind === 'stamp' ? 5000 : 3200);
+        setTimeout(() => get().dismissToast(id), t.kind === 'stamp' ? 5000 : t.kind === 'trip' ? 4500 : 3200);
       },
       dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
       setMuted: (m) => set({ muted: m }),

@@ -42,17 +42,17 @@ test('deep link opens location panel and Travel opens Trip.com in a new tab', as
       .first(),
   ).toHaveAttribute('href', /hotels\/list\?city=58806/);
 
-  const [popup] = await Promise.all([
-    page.context().waitForEvent('page'),
-    page
-      .getByRole('link', { name: /Car Rentals/ })
-      .locator('visible=true')
-      .first()
-      .click(),
-  ]);
+  const popupPromise = page.context().waitForEvent('page');
+  await page
+    .getByRole('link', { name: /Car Rentals/ })
+    .locator('visible=true')
+    .first()
+    .click();
+  // The toast is transient: check it right after the click, before handling the popup.
+  await expect(page.getByText('Opening Trip.com…')).toBeVisible();
+  const popup = await popupPromise;
   expect(popup.url()).toContain('trip.com');
   await popup.close();
-  await expect(page.getByText('Opening Trip.com…')).toBeVisible();
 });
 
 test('fly there lands at the pin and earns a passport stamp', async ({ page }) => {

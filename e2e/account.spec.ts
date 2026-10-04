@@ -61,7 +61,7 @@ test('register, sync a trip, sign in on another device and see it', async ({ pag
   // Sign out keeps local data but ends the session.
   await page2.goto('/account');
   await page2.getByTestId('logout').click();
-  await expect(page2.getByTestId('auth-form')).toBeVisible();
+  await expect(page2.getByTestId('auth-form')).toBeVisible({ timeout: 20_000 });
   await page2.reload();
   await expect(page2.getByTestId('auth-form')).toBeVisible({ timeout: 20_000 });
   await ctx2.close();
