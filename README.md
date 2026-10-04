@@ -21,6 +21,10 @@ npm test             # Vitest unit tests
 npm run test:e2e     # Playwright (builds + previews automatically)
 ```
 
+## Travel Summary
+
+Open **Travel Summary** from the menu, My Trips or the Passport. It replays every place you've visited (diary entries + film locations) in date order: a vehicle travels each leg (✈️ plane arcs, 🚗 car / 🚌 bus / ⛴️ boat along the surface), and a card pops up at each stop with the date, the place, your notes and how you got there. It ends with totals: places, countries, distance and legs by transport. You can play/pause, step, scrub the timeline, play at 1×/2×/4×, and filter to My trips or Film locations. To record how you travelled, use the "How did you travel here?" picker on a place. Otherwise the transport is estimated from distance and whether the route crosses water.
+
 ## Accounts (free: Cloudflare Pages Functions + D1/SQLite)
 
 Sign-in syncs trips, diary, passport stamps, favourites and the character across devices. The API lives in `functions/api/` (Pages Functions) with a D1 database (Cloudflare's free SQLite) defined in `migrations/`. Passwords are hashed with PBKDF2-SHA256, sessions use HttpOnly cookies, cross-site writes are rejected, and sign-in attempts are rate-limited. Without the API the app still works and keeps data on the device; the Account page then says accounts aren't available.

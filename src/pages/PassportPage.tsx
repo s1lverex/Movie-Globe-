@@ -1,6 +1,6 @@
-import { Lock } from 'lucide-react';
+import { Lock, PlayCircle } from 'lucide-react';
 import { LOCATIONS } from '../data';
-import { openLocation } from '../lib/nav';
+import { navigate, openLocation } from '../lib/nav';
 import { useAppStore } from '../store/useAppStore';
 import { Overlay } from '../ui/Overlay';
 
@@ -9,6 +9,14 @@ export default function PassportPage() {
   const count = Object.keys(visited).length;
   return (
     <Overlay title="Passport" wide>
+      <button
+        type="button"
+        className="btn-primary mb-4 w-full py-2.5 text-sm"
+        onClick={() => navigate('/summary')}
+        data-testid="open-summary"
+      >
+        <PlayCircle size={16} /> Travel Summary
+      </button>
       <div className="mb-5 rounded-3xl bg-gradient-to-br from-[#1E3A8A] to-[#0F1B3D] p-5 ring-1 ring-white/10">
         <div className="text-xs tracking-[.25em] text-[#9CC2FF] uppercase">Movie Globe Passport</div>
         <div className="mt-1 font-display text-3xl font-bold text-white">

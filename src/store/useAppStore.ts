@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { LatLng } from '../types';
+import type { Transport } from '../lib/summary';
 import { DEFAULT_CHARACTER, isValidCharacter, type CharacterConfig } from './character';
 
 export type CameraMode = 'orbit' | 'follow';
@@ -35,6 +36,8 @@ export interface DiaryPlace {
   date: string;
   notes: string;
   visitedAt?: number;
+  /** How the user travelled there (unset = inferred in the Travel Summary). */
+  transport?: Transport;
 }
 
 export interface DraftPlace {

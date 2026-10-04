@@ -46,6 +46,13 @@
   The client (`src/lib/account.ts`, `src/lib/sync.ts`) merges this device with the account on sign-in (union of places, stamps and favourites; the account's copy wins on conflicts) and auto-saves changes 1.5 s after they happen. Known limits: no email verification or password reset (both need an email service). Deletions on one device can come back after merging with another device's offline copy, because there are no tombstones.
 - **Nearby landmarks:** `src/scene/NearbyLandmarks.tsx` with 121 curated landmarks + about 790 capitals and large cities from Natural Earth (`src/data/places.json`, lazy-loaded, ~25 KB gzip; rebuilt by `scripts/build_places.py`). The search radius adapts to zoom (250–1,600 km in the orbit view, 450 km in the follow view). Labels are laid out in screen space so they never overlap each other, the explorer or the controls; crowded ones slide into a callout column with a dashed leader line. Tapping one in Normal Mode starts planning a trip there.
 
+### Travel Summary (follow-up 5)
+
+- `src/lib/summary.ts` (pure, unit-tested): builds stops from visited diary places (uses "date visited", falling back to the arrival time) and film stamps, sorted by date, plus legs with transport.
+  - The transport is what the user recorded (`DiaryPlace.transport`; set from the new picker in the place panel, or `plane` automatically when they arrive by the in-app balloon flight).
+  - Otherwise it's inferred: over 1,200 km → plane; mostly over water → boat (or plane if over 700 km); under 250 km → car; else bus. The water check samples the existing ocean-mask texture (`src/lib/oceanMask.ts`).
+- `src/lib/summaryPlayer.ts`: the playback state machine (dwell → travel → dwell … → finale). The 3D layer is `src/scene/SummaryLayer.tsx`: progressive route lines coloured by transport, a moving vehicle marker, pop-in dated stop markers, and a camera that follows the vehicle. While the summary plays, the explorer, pins and landmarks are hidden. The UI is `src/pages/TravelSummaryPage.tsx` (route `/summary`).
+
 ## 2. Run / build / deploy
 
 See README. Deploy: import the repo in Vercel or Netlify (free tier); build `npm run build`, output `dist/`. SPA rewrites are configured so `/location/<slug>` deep links work.

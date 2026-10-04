@@ -14,6 +14,8 @@ import { Clouds } from './Clouds';
 import { Globe } from './Globe';
 import { MoviePins, PlacePins } from './ModePins';
 import { NearbyLandmarks } from './NearbyLandmarks';
+import { SummaryLayer } from './SummaryLayer';
+import { useSummary } from '../lib/summaryPlayer';
 import { pickPoint } from '../lib/places';
 import { Stars } from './Stars';
 import { TravelArc } from './TravelArc';
@@ -50,6 +52,7 @@ function CameraLight() {
 export function Scene({ reducedMotion }: { reducedMotion: boolean }) {
   const lowPower = useLowPower();
   const appMode = useAppStore((s) => s.appMode);
+  const summaryOpen = useSummary((s) => s.open);
   const setAutoLowPower = useAppStore((s) => s.setAutoLowPower);
   const start = useAppStore.getState().position;
   const portrait = isPortrait();
@@ -85,14 +88,21 @@ export function Scene({ reducedMotion }: { reducedMotion: boolean }) {
         <Globe hiRes={hiRes} onSurfaceClick={onSurfaceClick} />
         {!lowPower && <Clouds reducedMotion={reducedMotion} />}
         <Atmosphere />
-        {appMode === 'movie' ? (
-          <MoviePins reducedMotion={reducedMotion} />
+        {summaryOpen ? (
+          // Travel Summary replay owns the globe: hide the live explorer & pins.
+          <SummaryLayer />
         ) : (
-          <PlacePins reducedMotion={reducedMotion} />
+          <>
+            {appMode === 'movie' ? (
+              <MoviePins reducedMotion={reducedMotion} />
+            ) : (
+              <PlacePins reducedMotion={reducedMotion} />
+            )}
+            <TravelArc reducedMotion={reducedMotion} />
+            <PlayerCharacter />
+            <NearbyLandmarks />
+          </>
         )}
-        <TravelArc reducedMotion={reducedMotion} />
-        <PlayerCharacter />
-        <NearbyLandmarks />
         <Preload all />
       </Suspense>
       <CameraRig reducedMotion={reducedMotion} />

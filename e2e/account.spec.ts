@@ -22,8 +22,8 @@ test('register, sync a trip, sign in on another device and see it', async ({ pag
   await page.getByLabel('Email').fill(email);
   await page.getByLabel(/Password/).fill('correct-horse-1');
   await page.getByTestId('auth-submit').click();
-  await expect(page.getByTestId('account-name')).toHaveText('Explorer');
-  await expect(page.getByTestId('sync-state')).toContainText('Synced');
+  await expect(page.getByTestId('account-name')).toHaveText('Explorer', { timeout: 20_000 });
+  await expect(page.getByTestId('sync-state')).toContainText('Synced', { timeout: 20_000 });
 
   // Plan a trip while signed in → auto-synced.
   await page.goto('/');

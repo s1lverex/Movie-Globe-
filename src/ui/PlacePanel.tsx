@@ -4,6 +4,7 @@ import { formatKm } from '../lib/geo';
 import { formatCoords } from '../lib/geocode';
 import { navigate } from '../lib/nav';
 import { saveDraft } from '../lib/places';
+import { TRANSPORTS, TRANSPORT_META, type Transport } from '../lib/summary';
 import { PLACE_COLORS } from '../scene/placeColors';
 import { distanceToPointKm, travelToPlace, WALK_MAX_KM } from '../scene/travel';
 import { useAppStore, type DiaryPlace } from '../store/useAppStore';
@@ -37,6 +38,7 @@ interface Draftish {
   status: DiaryPlace['status'] | 'draft';
   date: string;
   notes: string;
+  transport?: Transport;
   resolving?: boolean;
 }
 
@@ -125,6 +127,32 @@ function Body({ p, onClose }: { p: Draftish; onClose: () => void }) {
             </button>
           ))}
         </div>
+      )}
+
+      {!isDraft && (
+        <fieldset>
+          <legend className="mb-1 text-xs text-slate-400">
+            {p.status === 'visited' ? 'How did you travel here?' : 'How will you get there?'}
+          </legend>
+          <div className="flex gap-1.5" role="radiogroup">
+            {([undefined, ...TRANSPORTS] as (Transport | undefined)[]).map((m) => (
+              <button
+                key={m ?? 'auto'}
+                type="button"
+                role="radio"
+                aria-checked={p.transport === m}
+                onClick={() => patch({ transport: m })}
+                className={`flex-1 rounded-xl py-1.5 text-[11px] transition ${
+                  p.transport === m ? 'bg-accent text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                }`}
+                data-testid={`transport-${m ?? 'auto'}`}
+              >
+                <span className="block text-base">{m ? TRANSPORT_META[m].icon : '✨'}</span>
+                {m ? TRANSPORT_META[m].label : 'Auto'}
+              </button>
+            ))}
+          </div>
+        </fieldset>
       )}
 
       <label className="block space-y-1">

@@ -31,6 +31,7 @@ const PassportPage = lazy(() => import('./pages/PassportPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const TripsPage = lazy(() => import('./pages/TripsPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
+const TravelSummaryPage = lazy(() => import('./pages/TravelSummaryPage'));
 
 /** Mode-specific pages switch the app into their mode (supports deep links). */
 function ModeGate({ mode, children }: { mode: AppMode; children: ReactNode }) {
@@ -105,6 +106,8 @@ export default function App() {
   const touch = useTouchDevice();
   const { pathname } = useLocation();
   const selected = /^\/(location|place)\//.test(pathname) ? pathname : null;
+  // The Travel Summary replay takes over the screen: hide the live controls.
+  const replaying = pathname === '/summary';
   const overlay = /^\/(saved|tours|trips|account)$/.test(pathname)
     ? 'narrow'
     : /^\/(passport|about)$/.test(pathname)
@@ -141,50 +144,68 @@ export default function App() {
         {desktop ? (
           <>
             <Sidebar />
-            <div
-              className={`absolute top-4 z-20 flex flex-col items-center gap-2 ${
-                overlay === 'narrow'
-                  ? 'left-[700px]'
-                  : overlay === 'wide'
-                    ? 'left-[840px]'
-                    : selected
-                      ? 'left-64'
-                      : 'left-1/2 w-[min(440px,40vw)] -translate-x-1/2'
-              }`}
-            >
-              {pathname !== '/character' && <ModeToggle />}
-              {!selected && !overlay && pathname !== '/character' && <SearchBar className="w-full" />}
-            </div>
-            <MapControls
-              className={`absolute bottom-6 z-20 transition-all ${selected ? 'right-[452px] xl:right-[min(792px,calc(100vw-268px))]' : 'right-6'}`}
-            />
-            {touch && !selected && <Joystick className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2" />}
+            {!replaying && (
+              <>
+                <div
+                  className={`absolute top-4 z-20 flex flex-col items-center gap-2 ${
+                    overlay === 'narrow'
+                      ? 'left-[700px]'
+                      : overlay === 'wide'
+                        ? 'left-[840px]'
+                        : selected
+                          ? 'left-64'
+                          : 'left-1/2 w-[min(440px,40vw)] -translate-x-1/2'
+                  }`}
+                >
+                  {pathname !== '/character' && <ModeToggle />}
+                  {!selected && !overlay && pathname !== '/character' && <SearchBar className="w-full" />}
+                </div>
+                <MapControls
+                  className={`absolute bottom-6 z-20 transition-all ${selected ? 'right-[452px] xl:right-[min(792px,calc(100vw-268px))]' : 'right-6'}`}
+                />
+                {touch && !selected && (
+                  <Joystick className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2" />
+                )}
+              </>
+            )}
             <p className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 text-[10px] text-slate-500">
               {brand.name} is not affiliated with Trip.com{appMode === 'movie' ? ' or any film studio' : ''}.
             </p>
           </>
         ) : (
           <>
-            <MobileHeader />
-            <div className="absolute inset-x-0 top-[72px] z-30 flex justify-center">
-              <ModeToggle />
-            </div>
-            {!selected && <MapControls className="absolute right-4 bottom-28 z-20" />}
-            {!selected && <Joystick className="absolute bottom-28 left-1/2 z-20 -translate-x-1/2" />}
-            {!selected && <BottomNav />}
+            {!replaying && (
+              <>
+                <MobileHeader />
+                <div className="absolute inset-x-0 top-[72px] z-30 flex justify-center">
+                  <ModeToggle />
+                </div>
+                {!selected && <MapControls className="absolute right-4 bottom-28 z-20" />}
+                {!selected && <Joystick className="absolute bottom-28 left-1/2 z-20 -translate-x-1/2" />}
+                {!selected && <BottomNav />}
+              </>
+            )}
           </>
         )}
 
         <div
           className={`absolute inset-x-0 z-[35] flex justify-center px-4 ${desktop ? 'top-36' : 'top-32'}`}
         >
-          <JourneyCard hideFor={desktop && selected ? selected.split('/')[2] : null} />
+          {!replaying && <JourneyCard hideFor={desktop && selected ? selected.split('/')[2] : null} />}
         </div>
 
         <Routes>
           <Route path="/" element={null} />
           <Route path="/location/:slug" element={<LocationRoute desktop={desktop} />} />
           <Route path="/place/:id" element={<PlaceRoute desktop={desktop} />} />
+          <Route
+            path="/summary"
+            element={
+              <Suspense fallback={null}>
+                <TravelSummaryPage />
+              </Suspense>
+            }
+          />
           <Route
             path="/account"
             element={

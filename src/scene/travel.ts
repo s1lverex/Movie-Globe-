@@ -55,7 +55,9 @@ export function handlePlaceArrival(id: string): void {
   const p = s.places.find((x) => x.id === id);
   if (!p) return;
   if (p.status !== 'visited') {
-    s.updatePlace(id, { status: 'visited', visitedAt: Date.now() });
+    // Arriving by the in-app balloon flight counts as flying there.
+    const flew = s.travel?.slug === id && s.travel.mode === 'fly';
+    s.updatePlace(id, { status: 'visited', visitedAt: Date.now(), ...(flew && !p.transport ? { transport: 'plane' as const } : {}) });
     s.toast({ kind: 'stamp', title: 'Added to your travel diary', body: `You arrived at ${p.name}` });
     playSfx('stamp');
     track('place_visit');

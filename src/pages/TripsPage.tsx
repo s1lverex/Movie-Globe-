@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, CalendarDays, Wind } from 'lucide-react';
+import { BookOpen, CalendarDays, PlayCircle, Wind } from 'lucide-react';
 import { useEnsureMode } from '../lib/mode';
 import { navigate } from '../lib/nav';
 import { travelToPlace } from '../scene/travel';
@@ -55,6 +55,14 @@ export default function TripsPage() {
   const list = tab === 'planned' ? planned : visited;
   return (
     <Overlay title="My Trips">
+      <button
+        type="button"
+        className="btn-primary mb-4 w-full py-2.5 text-sm"
+        onClick={() => navigate('/summary')}
+        data-testid="open-summary"
+      >
+        <PlayCircle size={16} /> Travel Summary
+      </button>
       <div className="mb-4 flex rounded-2xl bg-white/5 p-1" role="tablist">
         {(
           [
