@@ -4,6 +4,7 @@ import { COUNTRIES, DECADES, GENRES, LOCATIONS, thumbFor } from '../data';
 import { openLocation } from '../lib/nav';
 import { matchesFilters } from '../store/filters';
 import { useAppStore } from '../store/useAppStore';
+import { PlaceSearch } from './PlaceSearch';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -54,6 +55,11 @@ export function FilterSelects() {
 }
 
 export function SearchBar({ className = '' }: { className?: string }) {
+  const mode = useAppStore((s) => s.appMode);
+  return mode === 'movie' ? <MovieSearch className={className} /> : <PlaceSearch className={className} />;
+}
+
+function MovieSearch({ className = '' }: { className?: string }) {
   const filters = useAppStore((s) => s.filters);
   const setFilters = useAppStore((s) => s.setFilters);
   const reset = useAppStore((s) => s.resetFilters);

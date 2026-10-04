@@ -17,15 +17,19 @@ export function TravelArc({ reducedMotion }: { reducedMotion: boolean }) {
   const selected = useAppStore((s) => s.selectedSlug);
   const travel = useAppStore((s) => s.travel);
   const walkTarget = useAppStore((s) => s.walkTarget);
-  const slug = travel?.slug ?? selected;
-  const dest = useMemo(() => {
-    if (slug && LOCATION_BY_SLUG[slug]) {
-      const l = LOCATION_BY_SLUG[slug];
-      return latLngToVector3(l.lat, l.lng);
-    }
-    if (walkTarget) return latLngToVector3(walkTarget.lat, walkTarget.lng);
-    return null;
-  }, [slug, walkTarget]);
+  const appMode = useAppStore((s) => s.appMode);
+  const place = useAppStore((s) => s.places.find((p) => p.id === s.selectedPlaceId) ?? null);
+  const draft = useAppStore((s) => s.draftPlace);
+  const target =
+    travel ??
+    (appMode === 'movie' ? (selected ? LOCATION_BY_SLUG[selected] : null) : (draft ?? place)) ??
+    walkTarget;
+  const tLat = target?.lat;
+  const tLng = target?.lng;
+  const dest = useMemo(
+    () => (tLat === undefined || tLng === undefined ? null : latLngToVector3(tLat, tLng)),
+    [tLat, tLng],
+  );
 
   const line = useRef<Line2>(null);
   const marker = useRef<Mesh>(null);

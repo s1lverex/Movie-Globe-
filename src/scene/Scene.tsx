@@ -12,7 +12,8 @@ import { CameraRig } from './CameraRig';
 import { PlayerCharacter } from './Character';
 import { Clouds } from './Clouds';
 import { Globe } from './Globe';
-import { Pins } from './Pins';
+import { MoviePins, PlacePins } from './ModePins';
+import { pickPoint } from '../lib/places';
 import { Stars } from './Stars';
 import { TravelArc } from './TravelArc';
 import { runtime } from './runtime';
@@ -24,9 +25,16 @@ function onSurfaceClick(e: ThreeEvent<MouseEvent>) {
   e.stopPropagation();
   const s = useAppStore.getState();
   if (s.travel?.mode === 'fly') return;
-  s.startTravel(null);
-  s.setWalkTarget(vector3ToLatLng(e.point.clone().normalize()));
+  const p = vector3ToLatLng(e.point.clone().normalize());
   runtime.lastInteraction = performance.now();
+  // Normal Mode: any spot on the globe becomes a place you can plan / travel to.
+  if (s.appMode === 'normal') {
+    pickPoint(p.lat, p.lng);
+    return;
+  }
+  // Movie Mode: tap-to-walk.
+  s.startTravel(null);
+  s.setWalkTarget(p);
 }
 
 /** Key light that follows the camera so the character is always readable. */
@@ -40,6 +48,7 @@ function CameraLight() {
 
 export function Scene({ reducedMotion }: { reducedMotion: boolean }) {
   const lowPower = useLowPower();
+  const appMode = useAppStore((s) => s.appMode);
   const setAutoLowPower = useAppStore((s) => s.setAutoLowPower);
   const start = useAppStore.getState().position;
   const portrait = isPortrait();
@@ -75,7 +84,11 @@ export function Scene({ reducedMotion }: { reducedMotion: boolean }) {
         <Globe hiRes={hiRes} onSurfaceClick={onSurfaceClick} />
         {!lowPower && <Clouds reducedMotion={reducedMotion} />}
         <Atmosphere />
-        <Pins reducedMotion={reducedMotion} />
+        {appMode === 'movie' ? (
+          <MoviePins reducedMotion={reducedMotion} />
+        ) : (
+          <PlacePins reducedMotion={reducedMotion} />
+        )}
         <TravelArc reducedMotion={reducedMotion} />
         <PlayerCharacter />
         <Preload all />

@@ -11,14 +11,14 @@ import {
   Quaternion,
   Vector3,
 } from 'three';
-import { LOCATIONS, LOCATION_BY_SLUG } from '../data';
+import { LOCATIONS } from '../data';
 import { latLngToVector3, vector3ToLatLng } from '../lib/geo';
 import { useAppStore } from '../store/useAppStore';
 import { arcHeight, easeInOut, flightDuration } from './arc';
 import { Balloon } from './Balloon';
 import { CharacterModel, type CharacterAnim } from './CharacterModel';
 import { resetForward, runtime } from './runtime';
-import { ARRIVAL_KM, handleArrival } from './travel';
+import { ARRIVAL_KM, handleArrival, handlePlaceArrival } from './travel';
 import { effectiveDistance } from './view';
 import { greatCircleSlerp } from '../lib/geo';
 
@@ -158,7 +158,14 @@ export function PlayerCharacter() {
   const anim = useRef<CharacterAnim>({ speed: 0 });
   const dustEmit = useRef(0);
   const shadowTex = useMemo(shadowTexture, []);
-  const flight = useRef<{ from: Vector3; to: Vector3; t: number; dur: number; slug: string } | null>(null);
+  const flight = useRef<{
+    from: Vector3;
+    to: Vector3;
+    t: number;
+    dur: number;
+    slug: string;
+    kind: 'movie' | 'place';
+  } | null>(null);
   const timers = useRef({ save: 0, arrival: 0 });
   const lastSaved = useRef(new Vector3());
 
@@ -172,15 +179,14 @@ export function PlayerCharacter() {
 
   useEffect(() => {
     if (travel?.mode === 'fly') {
-      const l = LOCATION_BY_SLUG[travel.slug];
-      if (!l) return;
-      const to = latLngToVector3(l.lat, l.lng);
+      const to = latLngToVector3(travel.lat, travel.lng);
       flight.current = {
         from: runtime.pos.clone(),
         to,
         t: 0,
         dur: flightDuration(runtime.pos, to),
-        slug: l.slug,
+        slug: travel.slug,
+        kind: travel.kind,
       };
     } else {
       flight.current = null;
@@ -210,7 +216,8 @@ export function PlayerCharacter() {
         runtime.lift = 0;
         runtime.flying = false;
         runtime.pos.copy(f.to);
-        handleArrival(f.slug);
+        if (f.kind === 'place') handlePlaceArrival(f.slug);
+        else handleArrival(f.slug);
       }
     } else {
       runtime.flying = false;
@@ -309,16 +316,27 @@ export function PlayerCharacter() {
     }
 
     // Arrival detection + persistence (throttled).
-    timers.current.arrival += dt;
+    // Timers use real time so arrival checks and saves keep their cadence at low fps.
+    const realDt = Math.min(rawDt, 0.5);
+    timers.current.arrival += realDt;
     if (timers.current.arrival > 0.2 && !runtime.flying) {
       timers.current.arrival = 0;
-      for (const l of LOCATIONS) {
-        if (runtime.pos.angleTo(latLngToVector3(l.lat, l.lng, 1, _v)) < ARRIVAL_RAD) {
-          if (!store.visited[l.slug] || store.travel?.slug === l.slug) handleArrival(l.slug);
+      if (store.appMode === 'movie') {
+        for (const l of LOCATIONS) {
+          if (runtime.pos.angleTo(latLngToVector3(l.lat, l.lng, 1, _v)) < ARRIVAL_RAD) {
+            if (!store.visited[l.slug] || store.travel?.slug === l.slug) handleArrival(l.slug);
+          }
+        }
+      } else {
+        // Normal Mode: reaching a planned place logs it in the diary.
+        for (const p of store.places) {
+          if (runtime.pos.angleTo(latLngToVector3(p.lat, p.lng, 1, _v)) < ARRIVAL_RAD) {
+            if (p.status !== 'visited' || store.travel?.slug === p.id) handlePlaceArrival(p.id);
+          }
         }
       }
     }
-    timers.current.save += dt;
+    timers.current.save += realDt;
     if (timers.current.save > 2 && lastSaved.current.distanceToSquared(runtime.pos) > 1e-8) {
       timers.current.save = 0;
       lastSaved.current.copy(runtime.pos);

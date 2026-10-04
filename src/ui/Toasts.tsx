@@ -6,7 +6,7 @@ export function Toasts() {
   const dismiss = useAppStore((s) => s.dismissToast);
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 top-20 z-[60] flex flex-col items-center gap-2 px-4 lg:top-6"
+      className="pointer-events-none fixed inset-x-0 top-32 z-[60] flex flex-col items-center gap-2 px-4 lg:top-auto lg:bottom-10"
       role="status"
       aria-live="polite"
     >

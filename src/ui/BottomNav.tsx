@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Navigation2, Stamp, X } from 'lucide-react';
+import { BookOpen, Menu, Navigation2, Stamp, X } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { Avatar } from './Avatar';
 import { Logo } from './Logo';
@@ -25,7 +25,7 @@ export function MobileHeader() {
         </button>
       </header>
       {open && (
-        <div className="fixed inset-0 z-[80] bg-black/50" onClick={() => setOpen(false)}>
+        <div className="pointer-events-auto fixed inset-0 z-[80] bg-black/50" onClick={() => setOpen(false)}>
           <div
             className="animate-slide-up absolute inset-y-0 right-0 flex w-72 flex-col gap-6 bg-[#0E1626] p-5 shadow-2xl"
             role="dialog"
@@ -59,6 +59,7 @@ export function MobileHeader() {
 export function BottomNav() {
   const character = useAppStore((s) => s.character);
   const setListView = useAppStore((s) => s.setListView);
+  const mode = useAppStore((s) => s.appMode);
   return (
     <nav
       aria-label="Quick actions"
@@ -79,9 +80,15 @@ export function BottomNav() {
       >
         <Navigation2 size={18} className="rotate-45" aria-hidden="true" /> Explore
       </button>
-      <Link to="/passport" aria-label="Passport" className="icon-btn h-[52px] w-[52px]">
-        <Stamp size={20} />
-      </Link>
+      {mode === 'movie' ? (
+        <Link to="/passport" aria-label="Passport" className="icon-btn h-[52px] w-[52px]">
+          <Stamp size={20} />
+        </Link>
+      ) : (
+        <Link to="/trips" aria-label="My trips" className="icon-btn h-[52px] w-[52px]">
+          <BookOpen size={20} />
+        </Link>
+      )}
     </nav>
   );
 }

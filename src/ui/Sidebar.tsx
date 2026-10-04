@@ -1,13 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import { NAV } from './nav';
+import { useAppStore } from '../store/useAppStore';
+import { NAV_BY_MODE } from './nav';
 import { Logo } from './Logo';
 import { JourneyBar } from './JourneyBar';
 import { SettingsToggles } from './Settings';
 
 export function NavItems({ onNavigate }: { onNavigate?: () => void }) {
+  const mode = useAppStore((s) => s.appMode);
   return (
     <nav aria-label="Main" className="flex flex-col gap-1">
-      {NAV.map(({ to, label, icon: Icon, end }) => (
+      {NAV_BY_MODE[mode].map(({ to, label, icon: Icon, end }) => (
         <NavLink
           key={to}
           to={to}

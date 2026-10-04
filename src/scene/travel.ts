@@ -2,37 +2,68 @@ import { LOCATION_BY_SLUG, TOURS } from '../data';
 import { haversineKm, vector3ToLatLng } from '../lib/geo';
 import { playSfx } from '../lib/sound';
 import { track } from '../lib/analytics';
-import { useAppStore } from '../store/useAppStore';
+import { useAppStore, type Travel } from '../store/useAppStore';
+import type { LatLng } from '../types';
 import { runtime } from './runtime';
 
 export const ARRIVAL_KM = 50;
 export const WALK_MAX_KM = 2000;
 
+export function distanceToPointKm(p: LatLng): number {
+  return haversineKm(vector3ToLatLng(runtime.pos), p);
+}
+
 export function distanceToKm(slug: string): number {
   const l = LOCATION_BY_SLUG[slug];
   if (!l) return Infinity;
-  return haversineKm(vector3ToLatLng(runtime.pos), l);
+  return distanceToPointKm(l);
 }
 
-export function flyTo(slug: string): void {
+function start(t: Travel) {
   const s = useAppStore.getState();
-  s.startTravel({ mode: 'fly', slug });
-  useAppStore.setState({ trackFlight: true });
-  s.setCameraMode('orbit');
-  playSfx('whoosh');
-  track('fly', { slug });
+  s.startTravel(t);
+  if (t.mode === 'fly') {
+    useAppStore.setState({ trackFlight: true });
+    s.setCameraMode('orbit');
+    playSfx('whoosh');
+  } else {
+    s.setWalkTarget({ lat: t.lat, lng: t.lng });
+  }
+  track(t.mode, { kind: t.kind, id: t.slug });
+}
+
+/** Movie Mode: travel to a film location. */
+export function flyTo(slug: string): void {
+  const l = LOCATION_BY_SLUG[slug];
+  if (l) start({ mode: 'fly', kind: 'movie', slug, lat: l.lat, lng: l.lng });
 }
 
 export function walkTo(slug: string): void {
   const l = LOCATION_BY_SLUG[slug];
-  if (!l) return;
-  const s = useAppStore.getState();
-  s.startTravel({ mode: 'walk', slug });
-  s.setWalkTarget({ lat: l.lat, lng: l.lng });
-  track('walk', { slug });
+  if (l) start({ mode: 'walk', kind: 'movie', slug, lat: l.lat, lng: l.lng });
 }
 
-/** Called whenever the character comes within ARRIVAL_KM of a location. */
+/** Normal Mode: travel to a saved diary place. */
+export function travelToPlace(id: string, mode: 'fly' | 'walk'): void {
+  const p = useAppStore.getState().places.find((x) => x.id === id);
+  if (p) start({ mode, kind: 'place', slug: id, lat: p.lat, lng: p.lng });
+}
+
+/** Normal Mode: arriving at a planned place logs it in the travel diary. */
+export function handlePlaceArrival(id: string): void {
+  const s = useAppStore.getState();
+  const p = s.places.find((x) => x.id === id);
+  if (!p) return;
+  if (p.status !== 'visited') {
+    s.updatePlace(id, { status: 'visited', visitedAt: Date.now() });
+    s.toast({ kind: 'stamp', title: 'Added to your travel diary', body: `You arrived at ${p.name}` });
+    playSfx('stamp');
+    track('place_visit');
+  } else if (s.travel?.slug === id) playSfx('land');
+  if (s.travel?.slug === id) s.startTravel(null);
+}
+
+/** Movie Mode: called whenever the character comes within ARRIVAL_KM of a film location. */
 export function handleArrival(slug: string): void {
   const s = useAppStore.getState();
   const l = LOCATION_BY_SLUG[slug];

@@ -1,18 +1,23 @@
 import { Vector3 } from 'three';
 import { latLngToVector3 } from '../lib/geo';
-import type { FilmLocation } from '../types';
 
-export interface Cluster {
+export interface Clusterable {
   id: string;
-  items: FilmLocation[];
+  lat: number;
+  lng: number;
+}
+
+export interface Cluster<T extends Clusterable> {
+  id: string;
+  items: T[];
   center: Vector3;
 }
 
 /** Greedy angular clustering: pins closer than `thresholdRad` merge. */
-export function clusterLocations(locs: FilmLocation[], thresholdRad: number): Cluster[] {
+export function clusterLocations<T extends Clusterable>(locs: T[], thresholdRad: number): Cluster<T>[] {
   const pts = locs.map((l) => ({ l, v: latLngToVector3(l.lat, l.lng) }));
   const used = new Set<number>();
-  const clusters: Cluster[] = [];
+  const clusters: Cluster<T>[] = [];
   for (let i = 0; i < pts.length; i++) {
     if (used.has(i)) continue;
     used.add(i);
@@ -25,7 +30,7 @@ export function clusterLocations(locs: FilmLocation[], thresholdRad: number): Cl
       }
     }
     const center = members.reduce((acc, m) => acc.add(m.v), new Vector3()).normalize();
-    clusters.push({ id: members.map((m) => m.l.slug).join('|'), items: members.map((m) => m.l), center });
+    clusters.push({ id: members.map((m) => m.l.id).join('|'), items: members.map((m) => m.l), center });
   }
   return clusters;
 }

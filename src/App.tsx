@@ -1,5 +1,5 @@
 import { Component, lazy, Suspense, useEffect, type ReactNode } from 'react';
-import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { LOCATION_BY_SLUG } from './data';
 import { registerNavigate } from './lib/nav';
 import { track } from './lib/analytics';
@@ -15,6 +15,11 @@ import { LocationPanel } from './ui/LocationPanel';
 import { MapControls } from './ui/MapControls';
 import { Onboarding } from './ui/Onboarding';
 import { SearchBar } from './ui/SearchBar';
+import { ModeToggle } from './ui/ModeToggle';
+import { PlacePanel } from './ui/PlacePanel';
+import { switchMode, useEnsureMode } from './lib/mode';
+import { useBrand, useDocumentTitle } from './lib/brand';
+import type { AppMode } from './store/useAppStore';
 import { Sidebar } from './ui/Sidebar';
 import { Toasts } from './ui/Toasts';
 
@@ -23,6 +28,19 @@ const SavedPage = lazy(() => import('./pages/SavedPage'));
 const ToursPage = lazy(() => import('./pages/ToursPage'));
 const PassportPage = lazy(() => import('./pages/PassportPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
+const TripsPage = lazy(() => import('./pages/TripsPage'));
+
+/** Mode-specific pages switch the app into their mode (supports deep links). */
+function ModeGate({ mode, children }: { mode: AppMode; children: ReactNode }) {
+  useEnsureMode(mode);
+  return <Suspense fallback={null}>{children}</Suspense>;
+}
+
+function PlaceRoute({ desktop }: { desktop: boolean }) {
+  const { id = '' } = useParams();
+  useEnsureMode('normal');
+  return <PlacePanel key={id} id={id} desktop={desktop} />;
+}
 
 function hasWebGL(): boolean {
   try {
@@ -66,6 +84,7 @@ function LocationRoute({ desktop }: { desktop: boolean }) {
       navigate('/', { replace: true });
       return;
     }
+    switchMode('movie', { silent: true, keepRoute: true });
     select(loc.slug);
     if (useAppStore.getState().travel?.mode !== 'fly')
       camera({ type: 'focus', lat: loc.lat - (desktop ? 0 : 6), lng: loc.lng + (desktop ? 12 : 0) });
@@ -82,9 +101,18 @@ export default function App() {
   const desktop = useIsDesktop();
   const reducedMotion = useReducedMotion();
   const coarse = useCoarsePointer();
-  const selected = useAppStore((s) => s.selectedSlug);
+  const { pathname } = useLocation();
+  const selected = /^\/(location|place)\//.test(pathname) ? pathname : null;
+  const overlay = /^\/(saved|tours|trips)$/.test(pathname)
+    ? 'narrow'
+    : /^\/(passport|about)$/.test(pathname)
+      ? 'wide'
+      : null;
   const setListView = useAppStore((s) => s.setListView);
   useKeyboardMovement();
+  useDocumentTitle();
+  const brand = useBrand();
+  const appMode = useAppStore((s) => s.appMode);
 
   useEffect(() => registerNavigate((to) => navigate(to)), [navigate]);
   const webgl = typeof document !== 'undefined' && hasWebGL();
@@ -94,7 +122,7 @@ export default function App() {
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-[#05080F]">
-      <main className="absolute inset-0" aria-label="Movie Globe">
+      <main className="absolute inset-0" aria-label={brand.name}>
         {webgl ? (
           <SceneBoundary>
             <Scene reducedMotion={reducedMotion} />
@@ -110,19 +138,33 @@ export default function App() {
         {desktop ? (
           <>
             <Sidebar />
-            <div className="absolute top-4 left-1/2 z-20 w-[min(440px,40vw)] -translate-x-1/2">
-              {!selected && <SearchBar />}
+            <div
+              className={`absolute top-4 z-20 flex flex-col items-center gap-2 ${
+                overlay === 'narrow'
+                  ? 'left-[700px]'
+                  : overlay === 'wide'
+                    ? 'left-[840px]'
+                    : selected
+                      ? 'left-64'
+                      : 'left-1/2 w-[min(440px,40vw)] -translate-x-1/2'
+              }`}
+            >
+              {pathname !== '/character' && <ModeToggle />}
+              {!selected && !overlay && pathname !== '/character' && <SearchBar className="w-full" />}
             </div>
             <MapControls
               className={`absolute bottom-6 z-20 transition-all ${selected ? 'right-[452px] xl:right-[min(792px,calc(100vw-268px))]' : 'right-6'}`}
             />
             <p className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 text-[10px] text-slate-500">
-              Movie Globe is not affiliated with Trip.com or any film studio.
+              {brand.name} is not affiliated with Trip.com{appMode === 'movie' ? ' or any film studio' : ''}.
             </p>
           </>
         ) : (
           <>
             <MobileHeader />
+            <div className="absolute inset-x-0 top-[72px] z-30 flex justify-center">
+              <ModeToggle />
+            </div>
             {!selected && <MapControls className="absolute right-4 bottom-28 z-20" />}
             {!selected && coarse && <Joystick className="absolute bottom-28 left-4 z-20" />}
             {!selected && <BottomNav />}
@@ -130,14 +172,23 @@ export default function App() {
         )}
 
         <div
-          className={`absolute inset-x-0 z-[35] flex justify-center px-4 ${desktop ? 'top-20' : 'top-20'}`}
+          className={`absolute inset-x-0 z-[35] flex justify-center px-4 ${desktop ? 'top-36' : 'top-32'}`}
         >
-          <JourneyCard hideFor={desktop ? selected : null} />
+          <JourneyCard hideFor={desktop && selected ? selected.split('/')[2] : null} />
         </div>
 
         <Routes>
           <Route path="/" element={null} />
           <Route path="/location/:slug" element={<LocationRoute desktop={desktop} />} />
+          <Route path="/place/:id" element={<PlaceRoute desktop={desktop} />} />
+          <Route
+            path="/trips"
+            element={
+              <ModeGate mode="normal">
+                <TripsPage />
+              </ModeGate>
+            }
+          />
           <Route
             path="/character"
             element={
@@ -149,25 +200,25 @@ export default function App() {
           <Route
             path="/saved"
             element={
-              <Suspense fallback={null}>
+              <ModeGate mode="movie">
                 <SavedPage />
-              </Suspense>
+              </ModeGate>
             }
           />
           <Route
             path="/tours"
             element={
-              <Suspense fallback={null}>
+              <ModeGate mode="movie">
                 <ToursPage />
-              </Suspense>
+              </ModeGate>
             }
           />
           <Route
             path="/passport"
             element={
-              <Suspense fallback={null}>
+              <ModeGate mode="movie">
                 <PassportPage />
-              </Suspense>
+              </ModeGate>
             }
           />
           <Route

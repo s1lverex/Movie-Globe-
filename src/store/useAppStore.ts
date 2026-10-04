@@ -12,9 +12,36 @@ export interface Toast {
   kind?: 'info' | 'stamp' | 'trip';
 }
 
+export type AppMode = 'normal' | 'movie';
+
 export interface Travel {
   mode: 'fly' | 'walk';
+  /** 'movie' → slug is a film location slug; 'place' → slug is a diary place id. */
+  kind: 'movie' | 'place';
   slug: string;
+  lat: number;
+  lng: number;
+}
+
+/** A user-picked place in Normal Mode: planned trip or travel-diary entry. */
+export interface DiaryPlace {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  status: 'planned' | 'visited';
+  createdAt: number;
+  /** Planned trip date (YYYY-MM-DD), optional. */
+  date: string;
+  notes: string;
+  visitedAt?: number;
+}
+
+export interface DraftPlace {
+  lat: number;
+  lng: number;
+  name: string;
+  resolving: boolean;
 }
 
 export interface Filters {
@@ -38,8 +65,12 @@ interface AppState {
   muted: boolean;
   lowPower: boolean | null; // null = auto
   onboardingDone: boolean;
+  appMode: AppMode;
+  places: DiaryPlace[];
 
   // session
+  selectedPlaceId: string | null;
+  draftPlace: DraftPlace | null;
   selectedSlug: string | null;
   hoveredSlug: string | null;
   travel: Travel | null;
@@ -53,6 +84,12 @@ interface AppState {
   listView: boolean;
   trackFlight: boolean;
 
+  setAppMode: (m: AppMode) => void;
+  addPlace: (p: Omit<DiaryPlace, 'id' | 'createdAt'>) => DiaryPlace;
+  updatePlace: (id: string, patch: Partial<DiaryPlace>) => void;
+  removePlace: (id: string) => void;
+  selectPlace: (id: string | null) => void;
+  setDraftPlace: (d: DraftPlace | null) => void;
   setCharacter: (c: Partial<CharacterConfig>) => void;
   replaceCharacter: (c: CharacterConfig) => void;
   markVisited: (slug: string) => boolean;
@@ -91,6 +128,10 @@ export const useAppStore = create<AppState>()(
       muted: true,
       lowPower: null,
       onboardingDone: false,
+      appMode: 'normal',
+      places: [],
+      selectedPlaceId: null,
+      draftPlace: null,
 
       selectedSlug: null,
       hoveredSlug: null,
@@ -105,6 +146,25 @@ export const useAppStore = create<AppState>()(
       listView: false,
       trackFlight: true,
 
+      setAppMode: (m) => set({ appMode: m }),
+      addPlace: (p) => {
+        const place: DiaryPlace = {
+          ...p,
+          id: `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+          createdAt: Date.now(),
+        };
+        set((s) => ({ places: [...s.places, place] }));
+        return place;
+      },
+      updatePlace: (id, patch) =>
+        set((s) => ({ places: s.places.map((x) => (x.id === id ? { ...x, ...patch } : x)) })),
+      removePlace: (id) =>
+        set((s) => ({
+          places: s.places.filter((x) => x.id !== id),
+          selectedPlaceId: s.selectedPlaceId === id ? null : s.selectedPlaceId,
+        })),
+      selectPlace: (id) => set({ selectedPlaceId: id }),
+      setDraftPlace: (d) => set({ draftPlace: d }),
       setCharacter: (c) => set((s) => ({ character: { ...s.character, ...c } })),
       replaceCharacter: (c) => set({ character: c }),
       markVisited: (slug) => {
@@ -140,7 +200,9 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'movie-globe',
-      version: 1,
+      version: 2,
+      // v1 → v2 only added fields; merge() below fills in defaults.
+      migrate: (persisted) => persisted as AppState,
       partialize: (s) => ({
         character: s.character,
         visited: s.visited,
@@ -149,6 +211,8 @@ export const useAppStore = create<AppState>()(
         muted: s.muted,
         lowPower: s.lowPower,
         onboardingDone: s.onboardingDone,
+        appMode: s.appMode,
+        places: s.places,
       }),
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<AppState>;
@@ -156,6 +220,8 @@ export const useAppStore = create<AppState>()(
           ...current,
           ...p,
           character: p.character && isValidCharacter(p.character) ? p.character : current.character,
+          appMode: p.appMode === 'movie' ? 'movie' : 'normal',
+          places: Array.isArray(p.places) ? p.places : [],
         };
       },
     },

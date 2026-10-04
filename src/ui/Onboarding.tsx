@@ -3,16 +3,16 @@ import { useAppStore } from '../store/useAppStore';
 
 const STEPS = [
   {
-    title: 'Welcome to Movie Globe 🎬',
-    body: 'Spin the Earth and find glowing pins — each one is a real place where a famous film was shot.',
+    title: 'Welcome to Travel Globe 🌍',
+    body: 'Use the toggle at the top: Movie Mode shows real places where famous films were shot; Normal Mode lets you pick anywhere to plan trips and keep a travel diary.',
   },
   {
     title: 'Walk the world',
-    body: 'Use WASD / arrow keys or the joystick to walk, or tap anywhere on the globe and your explorer will walk there.',
+    body: 'Use WASD / arrow keys or the joystick to walk. In Movie Mode tapping the globe walks there; in Normal Mode it drops a pin you can plan.',
   },
   {
-    title: 'Visit & collect stamps',
-    body: 'Open a pin to Walk or Fly there. Arriving earns a passport stamp, and you can book a real trip on Trip.com.',
+    title: 'Travel, collect & record',
+    body: 'Walk or Fly to any pin. Film locations earn passport stamps, your own places go into your diary, and Trip.com links help you book for real.',
   },
 ];
 

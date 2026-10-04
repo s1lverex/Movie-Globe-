@@ -1,12 +1,13 @@
 import { ArrowRight } from 'lucide-react';
 import { LOCATION_BY_SLUG, TOURS, thumbFor } from '../data';
-import { openLocation } from '../lib/nav';
+import { navigate, openLocation } from '../lib/nav';
 import { nextTourStop } from '../scene/travel';
 import { useAppStore } from '../store/useAppStore';
 
 /** "Your next adventure" card shown during a flight, and tour narration cards on arrival. */
 export function JourneyCard({ hideFor }: { hideFor?: string | null }) {
   const travel = useAppStore((s) => s.travel);
+  const places = useAppStore((s) => s.places);
   const tour = useAppStore((s) => s.tour);
   const setTour = useAppStore((s) => s.setTour);
   const t = tour ? TOURS.find((x) => x.id === tour.id) : null;
@@ -51,6 +52,39 @@ export function JourneyCard({ hideFor }: { hideFor?: string | null }) {
   }
 
   if (travel?.mode !== 'fly' || (hideFor && hideFor === travel.slug)) return null;
+  if (travel.kind === 'place') {
+    const place = places.find((p) => p.id === travel.slug);
+    if (!place) return null;
+    return (
+      <div
+        className="glass animate-slide-up pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-3xl p-3 shadow-2xl"
+        role="status"
+        aria-live="polite"
+        data-testid="journey-card"
+      >
+        <span
+          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-accent/20 text-3xl"
+          aria-hidden="true"
+        >
+          🧳
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="text-[11px] text-slate-400">Your next trip</div>
+          <div className="truncate text-sm font-semibold text-white">{place.name}</div>
+          <div className="truncate text-xs text-slate-300">
+            {place.date ? `Planned for ${place.date}` : 'From your planner'}
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate(`/place/${place.id}`)}
+            className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-accent/20 px-3 py-1 text-[11px] font-medium text-[#9CC2FF] hover:bg-accent/30"
+          >
+            View details <ArrowRight size={12} />
+          </button>
+        </div>
+      </div>
+    );
+  }
   const loc = LOCATION_BY_SLUG[travel.slug];
   if (!loc) return null;
   return (

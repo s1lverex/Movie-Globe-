@@ -7,8 +7,10 @@ export default function AboutPage() {
     <Overlay title="About" wide>
       <div className="space-y-4 text-sm text-slate-300">
         <p>
-          <strong className="text-white">Movie Globe</strong> lets you walk a little explorer across a
-          real-time 3D Earth to visit famous film locations, collect passport stamps, and plan a real trip.
+          <strong className="text-white">Travel Globe</strong> lets you walk a little explorer across a
+          real-time 3D Earth. In <strong className="text-white">Normal Mode</strong> pick any place to plan
+          trips and keep a travel diary. Switch to <strong className="text-white">Movie Mode</strong> (Movie
+          Globe) to visit famous film locations and collect passport stamps.
         </p>
         <div className="rounded-2xl border border-white/10 bg-white/[.03] p-3 text-xs">
           <p className="font-semibold text-white">Controls</p>
@@ -20,8 +22,8 @@ export default function AboutPage() {
           </ul>
         </div>
         <p className="rounded-2xl border border-amber-300/20 bg-amber-300/5 p-3 text-xs text-amber-100">
-          Movie Globe is not affiliated with Trip.com or any film studio. Movie titles are used for
-          identification only. Photos show the real filming locations and are credited below.
+          Travel Globe / Movie Globe is not affiliated with Trip.com or any film studio. Movie titles are used
+          for identification only. Photos show the real filming locations and are credited below.
         </p>
         <Markdown source={credits} />
       </div>

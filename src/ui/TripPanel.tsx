@@ -1,5 +1,8 @@
 import { BedDouble, Car, ExternalLink, FerrisWheel, Plane, Plus, X } from 'lucide-react';
 import type { FilmLocation } from '../types';
+
+/** Minimal info needed to build Trip.com links (film location or diary place). */
+export type TripTarget = Pick<FilmLocation, 'slug' | 'place' | 'city' | 'tripCityQuery' | 'nearestAirport'>;
 import { TRIP_SECTIONS, tripLink, type TripSection } from '../lib/tripLinks';
 import { track } from '../lib/analytics';
 import { useAppStore } from '../store/useAppStore';
@@ -31,7 +34,7 @@ export function TripLink({
   children,
   ...rest
 }: {
-  loc: FilmLocation;
+  loc: TripTarget;
   section: TripSection;
   className?: string;
   children: React.ReactNode;
@@ -52,7 +55,7 @@ export function TripLink({
 }
 
 /** Desktop card / mobile inline: "Travel to this location" + Trip.com section grid. */
-export function TripPanel({ loc }: { loc: FilmLocation }) {
+export function TripPanel({ loc }: { loc: TripTarget }) {
   return (
     <section aria-labelledby="trip-heading" className="glass rounded-3xl p-5">
       <h3 id="trip-heading" className="sr-only">
@@ -101,7 +104,7 @@ export function TripPanel({ loc }: { loc: FilmLocation }) {
 }
 
 /** Mobile white sheet matching the "Travel Journey" mockup. */
-export function TripSheet({ loc, onClose }: { loc: FilmLocation; onClose: () => void }) {
+export function TripSheet({ loc, onClose }: { loc: TripTarget; onClose: () => void }) {
   return (
     <div
       className="pointer-events-auto fixed inset-0 z-[70] flex items-end bg-black/40 p-3 lg:items-center lg:justify-center"

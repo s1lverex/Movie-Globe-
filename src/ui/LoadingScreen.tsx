@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useProgress } from '@react-three/drei';
+import { useBrand } from '../lib/brand';
 
 export function LoadingScreen() {
+  const { name, tagline } = useBrand();
   const { progress, active, total } = useProgress();
   const [hidden, setHidden] = useState(false);
   const done = !active && (total > 0 ? progress >= 100 : false);
@@ -23,8 +25,8 @@ export function LoadingScreen() {
       data-testid="loading"
     >
       <img src="/favicon.svg" alt="" className="h-20 w-20 animate-pulse" />
-      <div className="mt-4 font-display text-2xl font-bold text-white">Movie Globe</div>
-      <div className="text-sm text-slate-400">Walk the World. See the Movies.</div>
+      <div className="mt-4 font-display text-2xl font-bold text-white">{name}</div>
+      <div className="text-sm text-slate-400">{tagline}</div>
       <div className="mt-6 h-1.5 w-56 overflow-hidden rounded-full bg-white/10">
         <div
           className="h-full rounded-full bg-accent transition-all"

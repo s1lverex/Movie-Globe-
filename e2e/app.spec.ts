@@ -3,7 +3,10 @@ import { expect, test, type Page } from '@playwright/test';
 async function skipOnboarding(page: Page) {
   await page.addInitScript(() => {
     if (!localStorage.getItem('movie-globe'))
-      localStorage.setItem('movie-globe', JSON.stringify({ state: { onboardingDone: true }, version: 1 }));
+      localStorage.setItem(
+        'movie-globe',
+        JSON.stringify({ state: { onboardingDone: true, appMode: 'movie' }, version: 1 }),
+      );
   });
 }
 
