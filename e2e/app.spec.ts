@@ -40,7 +40,7 @@ test('deep link opens location panel and Travel opens Trip.com in a new tab', as
       .getByRole('link', { name: /Hotels/ })
       .locator('visible=true')
       .first(),
-  ).toHaveAttribute('href', /hotels\/list\?keyword=Matamata/);
+  ).toHaveAttribute('href', /hotels\/list\?city=58806/);
 
   const [popup] = await Promise.all([
     page.context().waitForEvent('page'),
@@ -131,4 +131,30 @@ test('movie tour flies to the first stop and shows a narration card', async ({ p
   await expect(page.getByTestId('tour-card')).toContainText('Stop 1 of 4');
   await page.getByTestId('tour-next').click();
   await expect(page.getByTestId('tour-card')).toContainText('Stop 2 of 4', { timeout: 30_000 });
+});
+
+test('mobile joystick is shown and moves the explorer', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'mobile layout');
+  await skipOnboarding(page);
+  await page.goto('/');
+  await expect(page.getByTestId('loading')).toBeHidden({ timeout: 60_000 });
+  const stick = page.getByTestId('joystick');
+  await expect(stick).toBeVisible();
+  await page.waitForTimeout(1000);
+  const before = await page.evaluate(() =>
+    JSON.stringify(JSON.parse(localStorage.getItem('movie-globe')!).state.position),
+  );
+  const box = (await stick.boundingBox())!;
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  await page.mouse.move(cx, cy);
+  await page.mouse.down();
+  await page.mouse.move(cx, cy - 40, { steps: 5 });
+  await page.waitForTimeout(4000);
+  await page.mouse.up();
+  await page.waitForTimeout(2500);
+  const after = await page.evaluate(() =>
+    JSON.stringify(JSON.parse(localStorage.getItem('movie-globe')!).state.position),
+  );
+  expect(after).not.toEqual(before);
 });

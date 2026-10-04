@@ -1,9 +1,15 @@
+import { env } from './config';
+
 /**
- * Free place search / reverse geocoding via OpenStreetMap Nominatim
- * (no API key; usage policy: ≤1 request/s, attribution required).
+ * Place search / reverse geocoding. Default: free OpenStreetMap Nominatim
+ * (no key; ≤1 request/s; attribution required). A Nominatim-compatible paid
+ * provider (e.g. LocationIQ) can be enabled from `.env` without code changes.
  * Every call fails soft: callers fall back to coordinates.
  */
-const BASE = 'https://nominatim.openstreetmap.org';
+function endpoint(kind: 'search' | 'reverse', params: string): string {
+  const { url, key } = env.geocoder;
+  return `${url}/${kind}?format=json&addressdetails=1&accept-language=en&${params}${key ? `&key=${encodeURIComponent(key)}` : ''}`;
+}
 
 export interface GeoResult {
   name: string;
@@ -13,7 +19,7 @@ export interface GeoResult {
 
 let last = 0;
 async function politeFetch(url: string, timeoutMs = 6000): Promise<unknown> {
-  const wait = Math.max(0, last + 1000 - Date.now());
+  const wait = Math.max(0, last + env.geocoder.throttleMs - Date.now());
   if (wait) await new Promise((r) => setTimeout(r, wait));
   last = Date.now();
   const ctl = new AbortController();
@@ -54,7 +60,7 @@ export async function searchPlaces(query: string): Promise<GeoResult[]> {
   if (q.length < 2) return [];
   try {
     const data = (await politeFetch(
-      `${BASE}/search?format=jsonv2&addressdetails=1&limit=5&accept-language=en&q=${encodeURIComponent(q)}`,
+      endpoint('search', `limit=5&q=${encodeURIComponent(q)}`),
     )) as NominatimItem[];
     return data
       .filter((d) => d.lat && d.lon)
@@ -67,7 +73,7 @@ export async function searchPlaces(query: string): Promise<GeoResult[]> {
 export async function reverseGeocode(lat: number, lng: number): Promise<string | null> {
   try {
     const data = (await politeFetch(
-      `${BASE}/reverse?format=jsonv2&zoom=10&addressdetails=1&accept-language=en&lat=${lat}&lon=${lng}`,
+      endpoint('reverse', `zoom=10&lat=${lat}&lon=${lng}`),
     )) as NominatimItem & { error?: string };
     if (data.error) return null;
     return shortName(data);

@@ -1,7 +1,9 @@
 node_modules
 dist
 dev-dist
+# Real secrets go in .env.local (ignored). `.env` itself is a committed template.
+.env.local
+.env.*.local
 *.local
-.env
 playwright-report
 test-results

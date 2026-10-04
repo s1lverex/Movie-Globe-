@@ -6,7 +6,7 @@ import { track } from './lib/analytics';
 import { Scene } from './scene/Scene';
 import { useAppStore } from './store/useAppStore';
 import { BottomNav, MobileHeader } from './ui/BottomNav';
-import { useCoarsePointer, useIsDesktop, useKeyboardMovement, useReducedMotion } from './ui/hooks';
+import { useTouchDevice, useIsDesktop, useKeyboardMovement, useReducedMotion } from './ui/hooks';
 import { JourneyCard } from './ui/JourneyCard';
 import { Joystick } from './ui/Joystick';
 import { ListView } from './ui/ListView';
@@ -100,7 +100,7 @@ export default function App() {
   const navigate = useNavigate();
   const desktop = useIsDesktop();
   const reducedMotion = useReducedMotion();
-  const coarse = useCoarsePointer();
+  const touch = useTouchDevice();
   const { pathname } = useLocation();
   const selected = /^\/(location|place)\//.test(pathname) ? pathname : null;
   const overlay = /^\/(saved|tours|trips)$/.test(pathname)
@@ -155,6 +155,7 @@ export default function App() {
             <MapControls
               className={`absolute bottom-6 z-20 transition-all ${selected ? 'right-[452px] xl:right-[min(792px,calc(100vw-268px))]' : 'right-6'}`}
             />
+            {touch && !selected && <Joystick className="absolute bottom-8 left-64 z-20" />}
             <p className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 text-[10px] text-slate-500">
               {brand.name} is not affiliated with Trip.com{appMode === 'movie' ? ' or any film studio' : ''}.
             </p>
@@ -166,7 +167,7 @@ export default function App() {
               <ModeToggle />
             </div>
             {!selected && <MapControls className="absolute right-4 bottom-28 z-20" />}
-            {!selected && coarse && <Joystick className="absolute bottom-28 left-4 z-20" />}
+            {!selected && <Joystick className="absolute bottom-28 left-4 z-20" />}
             {!selected && <BottomNav />}
           </>
         )}

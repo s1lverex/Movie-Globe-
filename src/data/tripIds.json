@@ -1,0 +1,170 @@
+{
+  "alnwick-castle": {
+    "keyword": "Alnwick",
+    "districtId": 55682,
+    "districtName": "Alnwick",
+    "hotelCityId": 33902,
+    "hotelCityName": "Alnwick"
+  },
+  "glenfinnan-viaduct": {
+    "keyword": "Fort William",
+    "districtId": 59311,
+    "districtName": "Fort William",
+    "hotelCityId": 9621,
+    "hotelCityName": "Fort William"
+  },
+  "hobbiton": {
+    "keyword": "Matamata",
+    "districtId": 17074,
+    "districtName": "Matamata",
+    "hotelCityId": 58806,
+    "hotelCityName": "Matamata"
+  },
+  "kualoa-ranch": {
+    "keyword": "Honolulu",
+    "districtId": 2060,
+    "districtName": "Honolulu",
+    "hotelCityId": 757,
+    "hotelCityName": "Honolulu"
+  },
+  "zhangjiajie": {
+    "keyword": "Zhangjiajie",
+    "districtId": 23,
+    "districtName": "Zhangjiajie",
+    "hotelCityId": 27,
+    "hotelCityName": "Zhangjiajie"
+  },
+  "pont-de-bir-hakeim": {
+    "keyword": "Paris",
+    "districtId": 308,
+    "districtName": "Paris",
+    "hotelCityId": 192,
+    "hotelCityName": "Paris"
+  },
+  "kananaskis": {
+    "keyword": "Canmore",
+    "districtId": 58022,
+    "districtName": "Canmore",
+    "hotelCityId": 9443,
+    "hotelCityName": "Canmore"
+  },
+  "skellig-michael": {
+    "keyword": "Portmagee",
+    "districtId": 30161,
+    "districtName": "Portmagee",
+    "hotelCityId": 36687,
+    "hotelCityName": "Portmagee"
+  },
+  "matmata": {
+    "keyword": "Djerba",
+    "districtId": 2069,
+    "districtName": "Djerba",
+    "hotelCityId": 4109,
+    "hotelCityName": "Djerba"
+  },
+  "petra": {
+    "keyword": "Petra",
+    "districtId": 143896,
+    "districtName": "Petra",
+    "hotelCityId": 264260,
+    "hotelCityName": "Petra"
+  },
+  "wadi-rum": {
+    "keyword": "Aqaba",
+    "districtId": 766,
+    "districtName": "Aqaba",
+    "hotelCityId": 4375,
+    "hotelCityName": "Aqaba"
+  },
+  "salzburg": {
+    "keyword": "Salzburg",
+    "districtId": 440,
+    "districtName": "Salzburg",
+    "hotelCityId": 739,
+    "hotelCityName": "Salzburg"
+  },
+  "trevi-fountain": {
+    "keyword": "Rome",
+    "districtId": 303,
+    "districtName": "Rome",
+    "hotelCityId": 343,
+    "hotelCityName": "Rome"
+  },
+  "skopelos": {
+    "keyword": "Skopelos",
+    "districtId": 29035,
+    "districtName": "Skopelos",
+    "hotelCityId": 42410,
+    "hotelCityName": "Skopelos"
+  },
+  "glencoe": {
+    "keyword": "Fort William",
+    "districtId": 59311,
+    "districtName": "Fort William",
+    "hotelCityId": 9621,
+    "hotelCityName": "Fort William"
+  },
+  "maya-bay": {
+    "keyword": "Ko Phi Phi",
+    "districtId": 565,
+    "districtName": "Phi Phi Islands(Ko Phi Phi)",
+    "hotelCityId": 1228,
+    "hotelCityName": "Phi Phi Islands"
+  },
+  "park-hyatt-tokyo": {
+    "keyword": "Tokyo",
+    "districtId": 294,
+    "districtName": "Tokyo",
+    "hotelCityId": 228,
+    "hotelCityName": "Tokyo"
+  },
+  "burj-khalifa": {
+    "keyword": "Dubai",
+    "districtId": 1062,
+    "districtName": "Dubai",
+    "hotelCityId": 220,
+    "hotelCityName": "Dubai"
+  },
+  "svinafellsjokull": {
+    "keyword": "Skaftafell",
+    "districtId": 29735,
+    "districtName": "Skaftafell",
+    "hotelCityId": 7778,
+    "hotelCityName": "Skaftafell"
+  },
+  "namib-desert": {
+    "keyword": "Swakopmund",
+    "districtId": 22002,
+    "districtName": "Swakopmund",
+    "hotelCityId": 60906,
+    "hotelCityName": "Swakopmund"
+  },
+  "fifth-avenue-tiffany": {
+    "keyword": "New York",
+    "districtId": 248,
+    "districtName": "New York",
+    "hotelCityId": 633,
+    "hotelCityName": "New York"
+  },
+  "mumbai": {
+    "keyword": "Mumbai",
+    "districtId": 584,
+    "districtName": "Mumbai",
+    "hotelCityId": 724,
+    "hotelCityName": "Mumbai"
+  },
+  "monument-valley": {
+    "keyword": "Page",
+    "districtId": 33407,
+    "districtName": "Page",
+    "hotelCityId": 3804,
+    "hotelCityName": "Page"
+  },
+  "dubrovnik": {
+    "keyword": "Dubrovnik",
+    "districtId": 1529,
+    "districtName": "Dubrovnik",
+    "hotelCityId": 3901,
+    "hotelCityName": "Dubrovnik"
+  }
+}

@@ -23,6 +23,16 @@
 - Deep links switch mode automatically (`/location/*`, `/saved`, `/tours`, `/passport` → Movie; `/place/*`, `/trips` → Normal).
 - Bugs fixed along the way: the mobile menu drawer couldn't be tapped (pointer-events), and position saves and arrival checks used clamped physics time, so they stalled at low fps.
 
+### Mobile joystick, Trip.com pre-fill, `.env` (follow-up 2)
+
+- **Joystick fix:** it was always rendered off-screen. Its own `relative` class overrode the `absolute bottom-28` placement, putting it 112 px above the viewport. It was also gated on `(pointer: coarse)`, which some in-app browsers don't report. It now shows on every mobile-width layout (and on touch desktops/tablets), shows a MOVE label, and resets if it unmounts mid-drag. It's covered by an E2E test.
+- **Trip.com pre-fill:** film locations now link with Trip.com's own IDs, resolved and verified by `scripts/fetch_trip_ids.py`:
+  - Hotels → `hotels/list?city=<id>` (confirmed to pre-select the city, e.g. 58806 = Matamata, NZ).
+  - Attractions → `things-to-do/list?citytype=dt&id=<districtId>`.
+  - "View on / Travel to" → `travel-guide/destination/<name>-<districtId>/`.
+  - Flights and car hire still pass only the destination airport. Trip.com's bot challenge blocks verifying those from a server, and flights need a departure city that the app doesn't know. Normal Mode places (arbitrary spots) can't be resolved to Trip.com IDs from the browser (no public API / CORS), so they fall back to keyword search. The Trip.com mobile app may also drop URL parameters when it intercepts the link.
+- **`.env`** is now committed as a template with empty slots: geocoder provider/URL/key (LocationIQ or custom Nominatim-compatible endpoints work today), map keys, affiliate IDs, and server-only travel API secrets (reserved). Real values go in `.env.local` (git-ignored). Typed access is in `src/lib/config.ts`.
+
 ## 2. Run / build / deploy
 
 See README. Deploy: import the repo in Vercel or Netlify (free tier); build `npm run build`, output `dist/`. SPA rewrites are configured so `/location/<slug>` deep links work.
@@ -49,7 +59,7 @@ See README. Deploy: import the repo in Vercel or Netlify (free tier); build `npm
 
 ## 5. Unverified items
 
-- **Trip.com URL formats** (`src/lib/tripLinks.ts`): `flights/showfarefirst?acity=<iata>`, `hotels/list?keyword=<city>`, `global-search/searchlist/search?keyword=<place>`, `carhire/?pickupAirport=<IATA>`. All return HTTP 200, but Trip.com is a client-side app, so check in a real browser that the searches pre-fill.
+- **Trip.com URL formats** (`src/lib/tripLinks.ts`; hotels/attractions/destination for film locations are now verified, the rest below are not): `flights/showfarefirst?acity=<iata>`, `hotels/list?keyword=<city>`, `global-search/searchlist/search?keyword=<place>`, `carhire/?pickupAirport=<IATA>`. All return HTTP 200, but Trip.com is a client-side app, so check in a real browser that the searches pre-fill.
 - **Coordinates** were checked against public sources to roughly ±1 km. Petra uses the plan's general Petra coordinate (about 1 km from the Treasury). Skopelos uses the town, not the Agios Ioannis chapel.
 - Fun facts are written from general knowledge and should be fact-checked before launch.
 

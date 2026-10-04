@@ -21,7 +21,12 @@ npm test             # Vitest unit tests
 npm run test:e2e     # Playwright (builds + previews automatically)
 ```
 
-Optional: copy `.env.example` to `.env` and set `VITE_TRIP_AFFILIATE_PARAMS`.
+## Configuration (`.env`)
+
+The app runs on free services only. `.env` lists every slot for future paid providers (geocoding, maps, travel APIs, affiliate IDs), all empty by default. Put real keys in **`.env.local`** (git-ignored, overrides `.env`). Never put secrets in `VITE_*` variables: those are bundled into the browser. Server-only keys need a backend.
+
+- `VITE_GEOCODER_PROVIDER=locationiq` + `VITE_GEOCODER_KEY` switches place search to LocationIQ without code changes (any Nominatim-compatible endpoint works via `custom` + `VITE_GEOCODER_URL`).
+- `VITE_TRIP_AFFILIATE_PARAMS` appends Trip.com affiliate params to every link.
 
 ## Controls
 
@@ -30,6 +35,7 @@ Drag to orbit, scroll/pinch to zoom · WASD/arrows to walk (Shift = run) or the 
 ## Asset scripts
 
 - `scripts/fetch_photos.py` — downloads CC0/PD/CC BY photos of the real filming locations from Wikimedia Commons (`pip install pillow`).
+- `scripts/fetch_trip_ids.py` — resolves and verifies Trip.com destination / hotel-city IDs per film location (`src/data/tripIds.json`) so booking pages open pre-filled.
 - `scripts/gen_credits.py` — regenerates `CREDITS.md` from `src/data/photos.json`.
 - `scripts/render_icons.mjs` — renders PWA icons and the OG image from `public/favicon.svg` with Chromium.
 

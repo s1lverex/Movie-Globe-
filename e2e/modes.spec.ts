@@ -6,15 +6,13 @@ async function setup(page: Page) {
       localStorage.setItem('movie-globe', JSON.stringify({ state: { onboardingDone: true }, version: 2 }));
   });
   // Hermetic geocoding (OpenStreetMap Nominatim) and Trip.com.
-  await page
-    .context()
-    .route(/nominatim\.openstreetmap\.org/, (route) =>
-      route.request().url().includes('/reverse')
-        ? route.fulfill({ json: { address: { town: 'Testville', country: 'Wonderland' } } })
-        : route.fulfill({
-            json: [{ lat: '35.0116', lon: '135.768', address: { city: 'Kyoto', country: 'Japan' } }],
-          }),
-    );
+  await page.context().route(/nominatim\.openstreetmap\.org/, (route) =>
+    route.request().url().includes('/reverse')
+      ? route.fulfill({ json: { address: { town: 'Testville', country: 'Wonderland' } } })
+      : route.fulfill({
+          json: [{ lat: '35.0116', lon: '135.768', address: { city: 'Kyoto', country: 'Japan' } }],
+        }),
+  );
   await page.context().route(/trip\.com/, (route) => route.fulfill({ status: 200, body: 'stub' }));
 }
 

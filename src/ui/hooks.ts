@@ -16,7 +16,16 @@ export function useMediaQuery(query: string): boolean {
 
 export const useIsDesktop = () => useMediaQuery('(min-width: 1024px)');
 export const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: reduce)');
-export const useCoarsePointer = () => useMediaQuery('(pointer: coarse)');
+/**
+ * True on any touch-capable device. `(pointer: coarse)` alone is unreliable:
+ * some in-app / custom-tab browsers report a fine primary pointer on phones.
+ */
+export function useTouchDevice(): boolean {
+  const anyCoarse = useMediaQuery('(any-pointer: coarse)');
+  const touchPoints = typeof navigator !== 'undefined' && (navigator.maxTouchPoints ?? 0) > 0;
+  const touchEvents = typeof window !== 'undefined' && 'ontouchstart' in window;
+  return anyCoarse || touchPoints || touchEvents;
+}
 
 const MOVE_KEYS = new Set(['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright']);
 

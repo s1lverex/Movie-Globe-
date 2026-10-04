@@ -1,17 +1,29 @@
 import type { FilmLocation } from '../types';
+import tripIds from '../data/tripIds.json';
+import { env } from './config';
 
 export type TripSection = 'flights' | 'hotels' | 'attractions' | 'cars' | 'home';
 
 export const TRIP_HOME = 'https://www.trip.com/';
 
 /**
- * Builds outbound Trip.com links. No API is used. Formats were checked on
- * 2026-10-04 (all return HTTP 200) but Trip.com is a client-side app, so the
- * exact pre-filled search behaviour should be re-verified manually.
+ * Trip.com's own IDs for each film location's nearest town, resolved and
+ * verified by scripts/fetch_trip_ids.py. With them, hotel / attraction /
+ * destination pages open with the destination already filled in.
  */
+interface TripIds {
+  districtId: number;
+  districtName: string;
+  hotelCityId: number | null;
+}
+const IDS = tripIds as Record<string, TripIds>;
+
+export function tripIdsFor(slug: string | undefined): TripIds | undefined {
+  return slug ? IDS[slug] : undefined;
+}
+
 function affiliateParams(): string {
-  const raw = (import.meta.env.VITE_TRIP_AFFILIATE_PARAMS as string | undefined) ?? '';
-  return raw.trim().replace(/^[?&]/, '');
+  return env.tripAffiliateParams.trim().replace(/^[?&]/, '');
 }
 
 export function withAffiliate(url: string, extra = affiliateParams()): string {
@@ -19,12 +31,27 @@ export function withAffiliate(url: string, extra = affiliateParams()): string {
   return url + (url.includes('?') ? '&' : '?') + extra;
 }
 
+const slugify = (s: string) =>
+  s
+    .normalize('NFKD')
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-') || 'destination';
+
+/**
+ * Builds outbound Trip.com links (no API). Film locations use verified Trip.com
+ * IDs so the destination is pre-selected; anything else (Normal Mode places)
+ * falls back to keyword search. Flight / car-hire pre-fill can't be verified
+ * from a server (Trip.com bot challenge) and may only open the search form.
+ */
 export function tripLink(
-  loc: Pick<FilmLocation, 'tripCityQuery' | 'nearestAirport' | 'place'> | null,
+  loc: (Pick<FilmLocation, 'tripCityQuery' | 'nearestAirport' | 'place'> & { slug?: string }) | null,
   section: TripSection,
   extra?: string,
 ): string {
   if (!loc) return withAffiliate(TRIP_HOME, extra);
+  const ids = tripIdsFor(loc.slug);
   const city = encodeURIComponent(loc.tripCityQuery.trim());
   const iata = encodeURIComponent(loc.nearestAirport.trim().toLowerCase());
   let url: string;
@@ -35,12 +62,18 @@ export function tripLink(
         : 'https://www.trip.com/flights/';
       break;
     case 'hotels':
-      url = city ? `https://www.trip.com/hotels/list?keyword=${city}` : 'https://www.trip.com/hotels/';
+      url = ids?.hotelCityId
+        ? `https://www.trip.com/hotels/list?city=${ids.hotelCityId}`
+        : city
+          ? `https://www.trip.com/hotels/list?keyword=${city}`
+          : 'https://www.trip.com/hotels/';
       break;
     case 'attractions':
-      url = city
-        ? `https://www.trip.com/global-search/searchlist/search?keyword=${encodeURIComponent(loc.place)}`
-        : 'https://www.trip.com/things-to-do/';
+      url = ids
+        ? `https://www.trip.com/things-to-do/list?citytype=dt&id=${ids.districtId}`
+        : city
+          ? `https://www.trip.com/global-search/searchlist/search?keyword=${encodeURIComponent(loc.place)}`
+          : 'https://www.trip.com/things-to-do/';
       break;
     case 'cars':
       url = iata
@@ -49,7 +82,11 @@ export function tripLink(
       break;
     case 'home':
     default:
-      url = city ? `https://www.trip.com/global-search/searchlist/search?keyword=${city}` : TRIP_HOME;
+      url = ids
+        ? `https://www.trip.com/travel-guide/destination/${slugify(ids.districtName)}-${ids.districtId}/`
+        : city
+          ? `https://www.trip.com/global-search/searchlist/search?keyword=${city}`
+          : TRIP_HOME;
   }
   return withAffiliate(url, extra);
 }
