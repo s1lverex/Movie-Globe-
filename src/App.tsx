@@ -155,7 +155,7 @@ export default function App() {
             <MapControls
               className={`absolute bottom-6 z-20 transition-all ${selected ? 'right-[452px] xl:right-[min(792px,calc(100vw-268px))]' : 'right-6'}`}
             />
-            {touch && !selected && <Joystick className="absolute bottom-8 left-64 z-20" />}
+            {touch && !selected && <Joystick className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2" />}
             <p className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 text-[10px] text-slate-500">
               {brand.name} is not affiliated with Trip.com{appMode === 'movie' ? ' or any film studio' : ''}.
             </p>
@@ -167,7 +167,7 @@ export default function App() {
               <ModeToggle />
             </div>
             {!selected && <MapControls className="absolute right-4 bottom-28 z-20" />}
-            {!selected && <Joystick className="absolute bottom-28 left-4 z-20" />}
+            {!selected && <Joystick className="absolute bottom-28 left-1/2 z-20 -translate-x-1/2" />}
             {!selected && <BottomNav />}
           </>
         )}

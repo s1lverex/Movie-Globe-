@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { Vector3 } from 'three';
+import { Quaternion, Vector3 } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { latLngToVector3 } from '../lib/geo';
 import { useAppStore } from '../store/useAppStore';
@@ -16,6 +16,26 @@ const _dir = new Vector3();
 const _goal = new Vector3();
 const _look = new Vector3();
 const _up = new Vector3();
+const _q = new Quaternion();
+const _worldUp = new Vector3(0, 1, 0);
+const MAX_POLAR_Y = 0.985;
+
+/**
+ * Keeps a camera direction away from the exact poles, where an orbit camera
+ * with a fixed world-up would flip. Falls back to `prev`'s heading.
+ */
+function clampPolar(v: Vector3, prev: Vector3): Vector3 {
+  if (Math.abs(v.y) <= MAX_POLAR_Y) return v;
+  let hx = v.x;
+  let hz = v.z;
+  if (hx * hx + hz * hz < 1e-8) {
+    hx = prev.x;
+    hz = prev.z;
+  }
+  const h = Math.hypot(hx, hz) || 1;
+  const r = Math.sqrt(1 - MAX_POLAR_Y * MAX_POLAR_Y);
+  return v.set((hx / h) * r, Math.sign(v.y) * MAX_POLAR_Y, (hz / h) * r);
+}
 
 export function CameraRig({ reducedMotion }: { reducedMotion: boolean }) {
   const controls = useRef<OrbitControlsImpl>(null);
@@ -23,6 +43,8 @@ export function CameraRig({ reducedMotion }: { reducedMotion: boolean }) {
   const anim = useRef<{ dir: Vector3 | null; dist: number | null }>({ dir: null, dist: null });
   const cameraMode = useAppStore((s) => s.cameraMode);
   const lastUser = useRef(performance.now());
+  const dragging = useRef(false);
+  const following = useRef(false);
 
   // Camera commands from UI (zoom +/-, locate, focus on a pin). Polled per
   // frame so commands issued before the canvas mounted (deep links) still run.
@@ -91,13 +113,55 @@ export function CameraRig({ reducedMotion }: { reducedMotion: boolean }) {
       if (anim.current.dist === null) anim.current.dist = Math.max(2.3, Math.min(len, 3.2));
     }
 
+    // Follow the explorer: while it walks, rotate the globe with it so it stays
+    // centred. Paused while the user drags; settles once it stops moving.
     const a = anim.current;
+    const moving = runtime.speed > 0.05 && !runtime.flying;
+    if (moving && !dragging.current) following.current = true;
+    if (following.current && !dragging.current && !a.dir && s.travel?.mode !== 'fly') {
+      const prev = _look.copy(camera.position).normalize();
+      _dir
+        .copy(prev)
+        .lerp(runtime.pos, 1 - Math.exp(-dt * (reducedMotion ? 10 : 2.5)))
+        .normalize();
+      // Carry the camera's up-vector along the same rotation (parallel transport)
+      // so "screen up" stays continuous — this lets the follow cross the poles,
+      // which a fixed north-up orbit camera cannot.
+      _q.setFromUnitVectors(prev, _dir);
+      camera.up.applyQuaternion(_q);
+      camera.up.addScaledVector(_dir, -camera.up.dot(_dir)).normalize();
+      camera.position.copy(_dir).multiplyScalar(a.dist ?? len);
+      camera.lookAt(0, 0, 0);
+      if (!moving && _dir.angleTo(runtime.pos) < 0.004) following.current = false;
+    } else if (camera.up.y < 0.9999) {
+      // Not following: settle back to the normal north-up orbit (needed for
+      // dragging / auto-rotate), easing off the exact pole first.
+      const k = 1 - Math.exp(-dt * (dragging.current ? 8 : 3));
+      const prev = _look.copy(camera.position).normalize();
+      _dir.copy(prev);
+      clampPolar(_dir, prev);
+      _dir.lerp(prev, 1 - k).normalize();
+      camera.up.lerp(_worldUp, k).normalize();
+      if (camera.up.y > 0.9999) camera.up.copy(_worldUp);
+      camera.position.copy(_dir).multiplyScalar(len);
+      camera.lookAt(0, 0, 0);
+    }
+
     if (a.dir || a.dist !== null) {
       const k = 1 - Math.exp(-dt * (reducedMotion ? 10 : 3));
       _dir.copy(camera.position).normalize();
       if (a.dir) {
+        _look.copy(_dir);
         _dir.lerp(a.dir, k).normalize();
+        clampPolar(_dir, _look);
         if (_dir.angleTo(a.dir) < 0.002 && s.travel?.mode !== 'fly') a.dir = null;
+        // A pole target can't be reached exactly (clamped); stop once settled.
+        else if (
+          Math.abs(_dir.y) >= MAX_POLAR_Y - 1e-6 &&
+          Math.abs(a.dir.y) > MAX_POLAR_Y &&
+          s.travel?.mode !== 'fly'
+        )
+          a.dir = null;
       }
       let d = len;
       if (a.dist !== null) {
@@ -126,10 +190,15 @@ export function CameraRig({ reducedMotion }: { reducedMotion: boolean }) {
       maxDistance={MAX_DIST}
       autoRotateSpeed={0.35}
       onStart={() => {
+        dragging.current = true;
+        following.current = false;
         lastUser.current = performance.now();
         anim.current.dir = null;
         anim.current.dist = null;
         useAppStore.setState({ trackFlight: false });
+      }}
+      onEnd={() => {
+        dragging.current = false;
       }}
     />
   );
