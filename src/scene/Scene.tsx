@@ -13,6 +13,7 @@ import { PlayerCharacter } from './Character';
 import { Clouds } from './Clouds';
 import { Globe } from './Globe';
 import { MoviePins, PlacePins } from './ModePins';
+import { NearbyLandmarks } from './NearbyLandmarks';
 import { pickPoint } from '../lib/places';
 import { Stars } from './Stars';
 import { TravelArc } from './TravelArc';
@@ -91,6 +92,7 @@ export function Scene({ reducedMotion }: { reducedMotion: boolean }) {
         )}
         <TravelArc reducedMotion={reducedMotion} />
         <PlayerCharacter />
+        <NearbyLandmarks />
         <Preload all />
       </Suspense>
       <CameraRig reducedMotion={reducedMotion} />

@@ -14,6 +14,7 @@ Travel Globe (and its Movie Mode, Movie Globe) uses only free assets (CC0, publi
 - **Place search & reverse geocoding (Normal Mode)** — [OpenStreetMap Nominatim](https://nominatim.org) · Data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL).
 - **Explorer character, balloon and pins** — built procedurally in code for this project (no third-party models).
 - **Ambient music and sound effects** — synthesised at runtime with the Web Audio API (no audio files).
+- **Nearby cities** — [Natural Earth](https://www.naturalearthdata.com) 1:50m populated places (public domain). Landmark list and coordinates compiled for this project.
 - **Icons** — [Lucide](https://lucide.dev) (ISC licence).
 - **Fonts** — [Inter](https://fonts.google.com/specimen/Inter) and [Poppins](https://fonts.google.com/specimen/Poppins) via Google Fonts (SIL Open Font License).
 
