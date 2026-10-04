@@ -42,6 +42,9 @@ test('register, sync a trip, sign in on another device and see it', async ({ pag
   );
   await page.getByTestId('save-place').click();
   await saved;
+  // Device 1 is done: stop its WebGL globe so the software renderer isn't shared by two
+  // 3D pages (its session cookie stays valid for the cleanup step below).
+  await page.goto('about:blank');
 
   // A different device (fresh browser context, empty storage).
   const ctx2 = await browser.newContext(isMobile ? { viewport: { width: 375, height: 812 } } : {});
