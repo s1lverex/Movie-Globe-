@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'textures/earth/*_2k.webp'],
       manifest: {
-        name: 'Movie Globe',
-        short_name: 'Movie Globe',
-        description: 'Walk the World. See the Movies.',
+        name: 'Travel Globe',
+        short_name: 'Travel Globe',
+        description: 'Walk the World. Plan Your Journey.',
         theme_color: '#0B1220',
         background_color: '#0B1220',
         display: 'standalone',

@@ -1,6 +1,11 @@
-# Movie Globe 🌍🎬
+# Travel Globe 🌍 (Movie Globe in Movie Mode 🎬)
 
-*Walk the World. See the Movies.* — an interactive 3D globe where a customisable chibi explorer walks or flies to famous film locations, collects passport stamps, and links out to Trip.com to plan a real trip.
+An interactive 3D globe with a customisable chibi explorer and two modes, switched with the toggle at the top:
+
+- **Normal Mode — Travel Globe** (default): tap anywhere on the globe or search any city (OpenStreetMap) to drop a pin, save it to your **planner** with a date and notes, walk or fly there, and arriving logs it in your **travel diary** (`/trips`).
+- **Movie Mode — Movie Globe**: explore 24 verified film locations, travel to them, collect passport stamps and take guided movie tours.
+
+Both modes link out to Trip.com to book a real trip.
 
 Spec: [`Movie Globe Plan Md.md`](./Movie%20Globe%20Plan%20Md.md) · Status & deviations: [`Handover.md`](./Handover.md) · Assets: [`CREDITS.md`](./CREDITS.md)
 
@@ -28,4 +33,4 @@ Drag to orbit, scroll/pinch to zoom · WASD/arrows to walk (Shift = run) or the 
 - `scripts/gen_credits.py` — regenerates `CREDITS.md` from `src/data/photos.json`.
 - `scripts/render_icons.mjs` — renders PWA icons and the OG image from `public/favicon.svg` with Chromium.
 
-Movie Globe is not affiliated with Trip.com or any film studio.
+Travel Globe / Movie Globe is not affiliated with Trip.com or any film studio.

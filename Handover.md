@@ -1,4 +1,4 @@
-# Handover — Movie Globe
+# Handover — Travel Globe (Movie Globe in Movie Mode)
 
 ## 1. Task status
 
@@ -14,6 +14,14 @@
 | H Extras | T41–T45 | ✅ Done (tours, passport, deep links + share, synthesised audio off by default, 3-step onboarding) |
 | I Release | T46–T50 | ✅ Done (loading screen, lazy pages/photos, adaptive quality + Low power toggle, a11y list view, PWA, unit + E2E tests, CI workflow) |
 | | T51 Deploy | ⛔ Blocked — needs a hosting account. `vercel.json` / `netlify.toml` and OG/meta tags are ready |
+
+### Normal Mode / Movie Mode (follow-up)
+
+- Toggle: `src/ui/ModeToggle.tsx` (top centre on desktop, under the header on mobile). Mode persists; Normal Mode is the default.
+- Switching (`src/lib/mode.ts`) clears the selection, tours, filters and travel, leaves pages that belong to the other mode, and swaps the pins, navigation, search, Explore list, journey bar, tap behaviour, arrival logic and branding (Travel Globe vs. Movie Globe, `src/lib/brand.ts`).
+- Normal Mode: places are stored as `DiaryPlace` in the persisted store; `/place/new`, `/place/:id` (`src/ui/PlacePanel.tsx`) and `/trips` (`src/pages/TripsPage.tsx`) cover the planner and diary. Place names come from OpenStreetMap Nominatim (`src/lib/geocode.ts`, free, about 1 request/s). If it fails, coordinates are used instead.
+- Deep links switch mode automatically (`/location/*`, `/saved`, `/tours`, `/passport` → Movie; `/place/*`, `/trips` → Normal).
+- Bugs fixed along the way: the mobile menu drawer couldn't be tapped (pointer-events), and position saves and arrival checks used clamped physics time, so they stalled at low fps.
 
 ## 2. Run / build / deploy
 

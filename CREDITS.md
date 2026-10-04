@@ -1,6 +1,6 @@
 # Credits
 
-Movie Globe uses only free assets (CC0, public domain or CC BY). No movie posters, stills, logos or soundtrack clips are used.
+Travel Globe (and its Movie Mode, Movie Globe) uses only free assets (CC0, public domain or CC BY). No movie posters, stills, logos or soundtrack clips are used.
 
 ## Earth textures
 
@@ -9,8 +9,9 @@ Movie Globe uses only free assets (CC0, public domain or CC BY). No movie poster
 - **Clouds (Blue Marble cloud composite)** — NASA Goddard Space Flight Center. Public domain. [Source](https://visibleearth.nasa.gov/images/57747)
 - **Topography (bump) and ocean mask (specular)** — derived from NASA / GEBCO elevation map. Public domain. [Source](https://visibleearth.nasa.gov/images/73934)
 
-## Character, sound and icons
+## Character, sound, search and icons
 
+- **Place search & reverse geocoding (Normal Mode)** — [OpenStreetMap Nominatim](https://nominatim.org) · Data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL).
 - **Explorer character, balloon and pins** — built procedurally in code for this project (no third-party models).
 - **Ambient music and sound effects** — synthesised at runtime with the Web Audio API (no audio files).
 - **Icons** — [Lucide](https://lucide.dev) (ISC licence).
@@ -136,4 +137,4 @@ Photos show the real filming locations. Each is used under the licence listed; c
 
 ## Disclaimer
 
-Movie Globe is not affiliated with Trip.com or any film studio. Film titles are used only to identify locations. Location descriptions are original text written for this project.
+Travel Globe / Movie Globe is not affiliated with Trip.com or any film studio. Film titles are used only to identify locations. Location descriptions are original text written for this project.
